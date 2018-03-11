@@ -22,6 +22,7 @@ import android.widget.RemoteViews;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import by.aleks.ghcwidget.api.GitHubAPITask;
@@ -327,6 +328,7 @@ public class Widget extends AppWidgetProvider {
 
 
     private Bitmap createBitmap(CommitsBase base, Point size, String theme) {
+
         float daysLabelSpaceRatio = showDaysLabel ? 0.8f : 0;
 
 
@@ -341,6 +343,7 @@ public class Widget extends AppWidgetProvider {
 
         ColorTheme colorTheme = new ColorTheme();
 
+
         Bitmap bitmap = Bitmap.createBitmap(size.x, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
 
@@ -352,68 +355,80 @@ public class Widget extends AppWidgetProvider {
         paintText.setTextSize(textSize);
         paintText.setColor(Color.GRAY);
 
+
         if (base != null) {
+
             float initx = 0;
             float inity = 0;
             float x = 0, y;
 
             // Draw days labels.
             if (showDaysLabel) {
-                y = startOnMonday ? textSize * 2 + TEXT_GRAPH_SPACE : textSize * 2 + TEXT_GRAPH_SPACE + side;
+//                y = startOnMonday ? textSize * 2 + TEXT_GRAPH_SPACE : textSize * 2 + TEXT_GRAPH_SPACE + side;
+                y = textSize * 2 + TEXT_GRAPH_SPACE + side;
                 initx = x = textSize;
             }
 
-
-            ArrayList<ArrayList<Day>> weeks = base.getWeeks();
-
-            int weeksNum = Math.min(weeks.size(), weeksColumns * weeksRows);
-
-            int firstWeek = base.getFirstWeekOfMonth(weeksNum); //Number of the week above which there will be the first month name.
-
+            int daysNum = Math.min(base.getDays().size(), weeksColumns * weeksRows * 7);
 
             y = textSize + TEXT_GRAPH_SPACE;
 
+            int tmpi = 0;
+            if (startOnMonday) tmpi = 1;
+            int startPos = base.findStartPos(base.getDays().size() - daysNum, tmpi);
+//            int startPos = base.getDays().size() - daysNum;
+
             outerloop:
-            for (int i = weeks.size() - weeksNum; i < weeks.size(); ) {
+            for (int i = startPos; i < base.getDays().size(); ) {
                 x = initx;
                 inity = y;
 
                 if (showDaysLabel) {
                     y += 2 * side + space;
+                    if (startOnMonday) {
+                        y -= side + space;
+                    }
                     canvas.drawText(context.getString(R.string.m), 0, y, paintText);
                     canvas.drawText(context.getString(R.string.w), 0, y + 2 * (side + space), paintText);
                     canvas.drawText(context.getString(R.string.f), textSize * 0.1f, y + 4 * (side + space), paintText);
                     if (startOnMonday)
                         canvas.drawText(context.getString(R.string.s), textSize * 0.1f, y + 6 * (side + space), paintText);
                     initx = x = textSize;
+                    if (startOnMonday) {
+                        y += side + space;
+                    }
                     y -= 2 * side + space;
                 }
 
-                for (int j = i; i < j + weeksColumns; i++) {
-                    if (i >= weeks.size()) {
+                for (int j = i; i < j + weeksColumns * 7; ) {
+                    if (i > base.getDays().size()) {
                         break outerloop;
                     }
                     // Set the position and draw a month name.
-                    if ((firstWeek != -1 && (i - weeks.size() + firstWeek) % 4 == 0 && i != weeks.size() - 1) || firstWeek == i) {
-                        canvas.drawText(weeks.get(i).get(1).getMonthName(), x, inity - (textSize + TEXT_GRAPH_SPACE) + textSize, paintText);
+
+
+                    for (int k = i; i < k + 7; i++) {
+
+                        if (i > base.getDays().size()) {
+                            break outerloop;
+                        }
+
+                        if (base.getDays().get(i).getCalendar().get(Calendar.DAY_OF_MONTH) == 1) {
+                            canvas.drawText(base.getDays().get(i).getMonthName(), x, inity - (textSize + TEXT_GRAPH_SPACE) + textSize, paintText);
+                        }
+
+                        paint.setColor(colorTheme.getColor(theme, base.getDays().get(i).getLevel()));
+                        canvas.drawRect(x, y, x + side, y + side, paint);
+
+                        //
+
+                        canvas.drawText("" + base.getDays().get(i).getCalendar().get(Calendar.DAY_OF_WEEK), x, y, paintText);
+
+                        //
+
+                        y = y + side + space;
                     }
 
-                    for (Day day : weeks.get(i)) {
-                        if (startOnMonday && weeks.get(i).indexOf(day) == 0)
-                            continue;
-                        paint.setColor(colorTheme.getColor(theme, day.getLevel()));
-                        canvas.drawRect(x, y, x + side, y + side, paint);
-                        y = y + side + space;
-                    }
-                    if (startOnMonday) {
-                        try {
-                            paint.setColor(colorTheme.getColor(theme, weeks.get(i + 1).get(0).getLevel()));
-                        } catch (IndexOutOfBoundsException e) {
-                            break;
-                        }
-                        canvas.drawRect(x, y, x + side, y + side, paint);
-                        y = y + side + space;
-                    }
                     y = inity;
                     x = x + side + space;
                 }
@@ -422,6 +437,8 @@ public class Widget extends AppWidgetProvider {
         }
 
         return bitmap;
+
+        //return Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888);
     }
 
     private void adjustMonthsNum(Context context, int numColumns, int numRows) {

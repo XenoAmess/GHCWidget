@@ -88,17 +88,18 @@ public class GitHubAPITask extends AsyncTask<String, Integer, String> // Usernam
                                             eventType = xpp.next();
                                             break;
                                         } else {
-                                            base.newWeek();
+//                                            base.newWeek();
                                             eventType = xpp.next();
                                             break;
                                         }
-
                                     }
+
                                     if (xpp.getName().equals("rect")) {
                                         Date date = textFormat.parse(xpp.getAttributeValue(null, "data-date"));
                                         int commits = Integer.valueOf(xpp.getAttributeValue(null, "data-count"));
                                         String color = xpp.getAttributeValue(null, "fill");
-                                        Day day = new Day(date, commits, color);
+                                        int dayOfWeek = Integer.valueOf(xpp.getAttributeValue(null, "y"));
+                                        Day day = new Day(date, commits, color, dayOfWeek);
                                         base.addDay(day);
                                         eventType = xpp.next();
                                         break;

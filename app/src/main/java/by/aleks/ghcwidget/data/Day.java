@@ -12,16 +12,18 @@ public class Day {
     private int level;
     private int commitsNumber;
     private Calendar calendar = Calendar.getInstance();
+    private int dayOfWeek;
 
     public Calendar getCalendar() {
         return calendar;
     }
 
 
-    public Day(Date date, int commitsNumber, String color) {
+    public Day(Date date, int commitsNumber, String color, int dayOfWeek) {
         this.calendar.setTime(date);
         this.commitsNumber = commitsNumber;
         this.level = setLevel(color);
+        this.dayOfWeek = dayOfWeek;
     }
 
     public String toString() {
@@ -74,6 +76,11 @@ public class Day {
     public String getMonthName() {
         return new SimpleDateFormat("MMM").format(calendar.getTime());
     }
+
+    public int getDayOfWeek() {
+        return dayOfWeek;
+    }
+
 
     public int getYear() {
         return Integer.parseInt(new SimpleDateFormat("yyyy").format(calendar.getTime()));
