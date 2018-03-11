@@ -23,7 +23,7 @@ public class CommitsBase {
                 currentWeek--;
             }
             //Skip the previous year days after a new year.
-        } else if (currentDay != null && day.getYear() < currentDay.getYear())
+        } else if (currentDay != null && day.getCalendar().compareTo(currentDay.getCalendar()) < 0)
             return;
 
         weeks.get(currentWeek).add(day);

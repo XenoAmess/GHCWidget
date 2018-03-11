@@ -20,7 +20,9 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.widget.RemoteViews;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import by.aleks.ghcwidget.api.GitHubAPITask;
 import by.aleks.ghcwidget.data.ColorTheme;
@@ -54,6 +56,11 @@ public class Widget extends AppWidgetProvider {
     //below added by XenoAmess
     private int weeksColumns;
     private int weeksRows;
+
+    public static final float SPACE_RATIO = 0.1f;
+    public static final int TEXT_GRAPH_SPACE = 7;
+
+    public static int NOW_YEAR;
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -193,7 +200,7 @@ public class Widget extends AppWidgetProvider {
             if (weeksColumns < 1)
                 weeksColumns = 1;
         } catch (Exception e) {
-            weeksColumns = 17;
+            weeksColumns = 20;
         }
 //        try {
 //            weeksRows = Integer.parseInt(prefs.getString("weeks_rows", "1"));
@@ -251,25 +258,46 @@ public class Widget extends AppWidgetProvider {
 
     //Load data from the api using AsyncTask.
     private CommitsBase loadData(Context context, String username) {
-        String prefDataKey = "offline_data";
-        GitHubAPITask task = new GitHubAPITask(this, context);
+        int requiredDaySize = getDaySize(context);
+        int nowDaySize = 0;
 
+        GitHubAPITask task = null;
         try {
             status = STATUS_ONLINE;
-            String data;
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            SharedPreferences.Editor editor = prefs.edit();
-            // If the widget have to be updated online, load data and save it to SharedPreferences
-            if (online || !prefs.contains(prefDataKey)) {
-                data = task.execute(username).get();
-                if (data != null) {
-                    editor.putString(prefDataKey, data);
-                    editor.commit();
-                }
-            } else data = prefs.getString(prefDataKey, null);
-            return GitHubAPITask.parseResult(data);
+            ArrayList<String> dataStrings = new ArrayList<String>();
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
+            Date curDate = new Date(System.currentTimeMillis());
+            NOW_YEAR = Integer.parseInt(formatter.format(curDate));
+            int year = NOW_YEAR;
+
+            final String prefDataKeyHead = "offline_data";
+
+            while (requiredDaySize >= 0) {
+                task = new GitHubAPITask(this, context, year);
+                String prefDataKey = prefDataKeyHead + "_" + year;
+                String data;
+
+                // If the widget have to be updated online, load data and save it to SharedPreferences
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                SharedPreferences.Editor editor = prefs.edit();
+                if (online || !prefs.contains(prefDataKey)) {
+                    data = task.execute(username).get();
+                    if (data != null) {
+                        editor.putString(prefDataKey, data);
+                        editor.commit();
+                    }
+                } else data = prefs.getString(prefDataKey, null);
+                dataStrings.add(data);
+
+                if (year != NOW_YEAR)
+                    requiredDaySize -= (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) ? 366 : 365;
+                year--;
+            }
+            return GitHubAPITask.parseResult(dataStrings);
         } catch (Exception e) {
-            task.cancel(true);
+            if (task != null)
+                task.cancel(true);
             return null;
         }
     }
@@ -282,11 +310,23 @@ public class Widget extends AppWidgetProvider {
         return size;
     }
 
+    private int getRowSize(Context context) {
+        Point size = new Point();
+        ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getSize(size);
+        float daysLabelSpaceRatio = showDaysLabel ? 0.8f : 0;
+        float side = size.x / (weeksColumns + daysLabelSpaceRatio) * (1 - SPACE_RATIO);
+        float space = size.x / (weeksColumns + daysLabelSpaceRatio) - side;
+        float textSize = side * 0.87f;
+        int heightPerRow = (int) (7 * (side + space) + textSize + TEXT_GRAPH_SPACE);
+        return size.y / heightPerRow;
+    }
+
+    private int getDaySize(Context context) {
+        return weeksColumns * getRowSize(context) * 7;
+    }
+
 
     private Bitmap createBitmap(CommitsBase base, Point size, String theme) {
-        float SPACE_RATIO = 0.1f;
-        int TEXT_GRAPH_SPACE = 7;
-
         float daysLabelSpaceRatio = showDaysLabel ? 0.8f : 0;
 
 
@@ -296,8 +336,7 @@ public class Widget extends AppWidgetProvider {
 
         int heightPerRow = (int) (7 * (side + space) + textSize + TEXT_GRAPH_SPACE);
 
-        weeksRows = size.y / heightPerRow;
-
+        weeksRows = getRowSize(context);
         int height = heightPerRow * weeksRows;
 
         ColorTheme colorTheme = new ColorTheme();

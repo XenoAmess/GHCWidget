@@ -20,6 +20,8 @@ import java.io.InputStream;
 
 import by.aleks.ghcwidget.R;
 
+import static by.aleks.ghcwidget.Widget.NOW_YEAR;
+
 public class GitHubHelper {
 
     private static final int HTTP_STATUS_OK = 200;
@@ -45,10 +47,13 @@ public class GitHubHelper {
      * @return Array of html strings returned by the API.
      * @throws ApiException
      */
-    protected static synchronized String downloadFromServer(String username, Context context)
+    protected static synchronized String downloadFromServer(String username, Context context, int year)
             throws ApiException {
         String retval = null;
         String url = "https://github.com/users/" + username + "/contributions";
+        if (year != NOW_YEAR) {
+            url += "?from=" + year + "-12-31";
+        }
 
         Log.d(logTag, "Fetching " + url);
 
@@ -58,7 +63,7 @@ public class GitHubHelper {
 
         // load and attach cookies
         String cookies = CookieManager.getInstance().getCookie(context.getString(R.string.login_url));
-        if(cookies != null){
+        if (cookies != null) {
             BasicCookieStore lCS = getCookieStore(cookies, context.getString(R.string.domain));
 
             HttpContext localContext = new BasicHttpContext();

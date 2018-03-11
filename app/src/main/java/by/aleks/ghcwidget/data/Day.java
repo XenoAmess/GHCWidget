@@ -13,48 +13,53 @@ public class Day {
     private int commitsNumber;
     private Calendar calendar = Calendar.getInstance();
 
-    public Day(Date date, int commitsNumber, String color){
+    public Calendar getCalendar() {
+        return calendar;
+    }
+
+
+    public Day(Date date, int commitsNumber, String color) {
         this.calendar.setTime(date);
         this.commitsNumber = commitsNumber;
         this.level = setLevel(color);
     }
 
-    public String toString(){
-        return "Date:"+calendar.toString()+" Commits:"+commitsNumber+" Level:"+level;
+    public String toString() {
+        return "Date:" + calendar.toString() + " Commits:" + commitsNumber + " Level:" + level;
     }
 
-    private int setLevel(String color){
+    private int setLevel(String color) {
 
         // normal color scheme
 
-        if(color.equals("#ebedf0"))
+        if (color.equals("#ebedf0"))
             return 0;
-        if(color.equals("#c6e48b"))
+        if (color.equals("#c6e48b"))
             return 1;
-        if(color.equals("#7bc96f"))
+        if (color.equals("#7bc96f"))
             return 2;
-        if(color.equals("#239a3b"))
+        if (color.equals("#239a3b"))
             return 3;
-        if(color.equals("#196127"))
+        if (color.equals("#196127"))
             return 4;
 
         // spooky color scheme (only on halloween)
 
-        if(color.equals("#eeeeee"))
+        if (color.equals("#eeeeee"))
             return 0;
-        if(color.equals("#ffee4a"))
+        if (color.equals("#ffee4a"))
             return 1;
-        if(color.equals("#ffc501"))
+        if (color.equals("#ffc501"))
             return 2;
-        if(color.equals("#fe9600"))
+        if (color.equals("#fe9600"))
             return 3;
-        if(color.equals("#03001c"))
+        if (color.equals("#03001c"))
             return 4;
 
         throw new IllegalArgumentException("Can't find the color!");
     }
 
-    public int getLevel(){
+    public int getLevel() {
         return level;
     }
 
@@ -66,14 +71,17 @@ public class Day {
         this.commitsNumber = commitsNumber;
     }
 
-    public String getMonthName(){
+    public String getMonthName() {
         return new SimpleDateFormat("MMM").format(calendar.getTime());
     }
-    public int getYear(){ return Integer.parseInt(new SimpleDateFormat("yyyy").format(calendar.getTime())); }
 
-    public boolean isFirst(){
+    public int getYear() {
+        return Integer.parseInt(new SimpleDateFormat("yyyy").format(calendar.getTime()));
+    }
+
+    public boolean isFirst() {
         //return firstDayInMonth;
-        return calendar.get(Calendar.DAY_OF_MONTH)==1;
+        return calendar.get(Calendar.DAY_OF_MONTH) == 1;
     }
 
 }

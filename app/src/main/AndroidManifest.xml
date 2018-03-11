@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="by.aleks.ghcwidget" >
+    package="by.aleks.ghcwidget">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -8,8 +8,8 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-        <receiver android:name=".Widget" >
+        android:theme="@style/AppTheme">
+        <receiver android:name="by.aleks.ghcwidget.Widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
@@ -21,14 +21,13 @@
         </receiver>
 
         <activity
-            android:name=".WidgetPreferenceActivity"
-            android:exported="false" >
+            android:name="by.aleks.ghcwidget.WidgetPreferenceActivity"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" >
-        </activity>
+        <activity android:name="by.aleks.ghcwidget.LoginActivity"></activity>
     </application>
 
 </manifest>
