@@ -2,34 +2,46 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <EditTextPreference
-            android:key="username"
-            android:title="@string/username_pref_title"
-            android:summary="@string/username_pref_summary"
-            android:dialogTitle="@string/username_pref_dialog" />
+        android:dialogTitle="@string/username_pref_dialog"
+        android:key="username"
+        android:summary="@string/username_pref_summary"
+        android:title="@string/username_pref_title" />
 
     <ListPreference
-            android:key="color_theme"
-            android:title="@string/color_pref_title"
-            android:dialogTitle="@string/color_pref_title" />
+        android:dialogTitle="@string/color_pref_title"
+        android:key="color_theme"
+        android:title="@string/color_pref_title" />
+
+
+    <!--<EditTextPreference-->
+    <!--android:key="months"-->
+    <!--android:numeric="integer"-->
+    <!--android:title="@string/months_pref_title" />-->
 
     <EditTextPreference
-            android:key="months"
-            android:title="@string/months_pref_title"
-            android:numeric="integer"/>
+        android:key="weeks_columns"
+        android:numeric="integer"
+        android:title="@string/weeks_columns" />
+
+    <!--<EditTextPreference-->
+    <!--android:key="weeks_rows"-->
+    <!--android:numeric="integer"-->
+    <!--android:title="@string/weeks_rows" />-->
+
     <CheckBoxPreference
-            android:key="start_on_monday"
-            android:title="Start week on Monday"/>
+        android:key="start_on_monday"
+        android:title="Start week on Monday" />
     <CheckBoxPreference
-            android:key="days_labels"
-            android:title="Show days of week"
-            android:defaultValue="true"/>
+        android:defaultValue="true"
+        android:key="days_labels"
+        android:title="Show days of week" />
 
     <Preference
-            android:key="login"
-            android:title="Log in (to see private contributions)"/>
+        android:key="login"
+        android:title="Log in (to see private contributions)" />
 
     <Preference
-            android:key="logout"
-            android:title="Log out"/>
+        android:key="logout"
+        android:title="Log out" />
 
 </PreferenceScreen>

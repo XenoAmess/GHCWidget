@@ -6,73 +6,92 @@
              android:alpha="0.79">
 
     <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_horizontal|top"
+        android:background="@drawable/widget_shape">
+
+        <ImageView
+            android:id="@+id/commitsView"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/widget_shape"
-            android:layout_gravity="center_horizontal|top">
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="49dp"
+            android:adjustViewBounds="true"
+            android:minHeight="140dp" />
 
         <ImageView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:minHeight="70dp"
-                android:layout_margin="7dp"
-                android:id="@+id/commitsView"
-                android:layout_gravity="center_horizontal|top"/>
-
-        <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:id="@+id/octocatView"
-                android:background="@drawable/octocat"
-                android:alpha="0.8"
-                android:layout_marginLeft="7dp"
-                android:layout_below="@+id/commitsView" android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:fontFamily="sans-serif-thin"
-                android:textColor="@color/background_material_dark"
-                android:id="@+id/total"
-                android:layout_marginLeft="7dp"
-                android:layout_marginTop="7dp"
-                android:layout_below="@+id/commitsView"
-                android:layout_toRightOf="@+id/octocatView" android:layout_toEndOf="@+id/octocatView"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:fontFamily="sans-serif-thin"
-                android:textColor="@color/background_material_dark"
-                android:layout_marginLeft="5dp"
-                android:id="@+id/totalTextView"
-                android:layout_alignTop="@+id/total" android:layout_toRightOf="@+id/total"
-                android:layout_toEndOf="@+id/total"/>
+            android:id="@+id/octocatView"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/commitsView"
+            android:layout_marginBottom="7dp"
+            android:layout_marginStart="7dp"
+            android:alpha="0.8"
+            android:background="@drawable/octocat"
+            android:minHeight="35dp"
+            android:minWidth="35dp" />
 
         <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:fontFamily="sans-serif-thin"
-                android:textColor="@color/background_material_dark"
-                android:id="@+id/days"
-                android:layout_alignTop="@+id/daysTextView" android:layout_toLeftOf="@+id/daysTextView"
-                android:layout_toStartOf="@+id/daysTextView"/>
+            android:id="@+id/total"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:gravity="center_vertical|right"
+            android:layout_alignTop="@+id/octocatView"
+            android:layout_marginStart="7dp"
+            android:layout_toEndOf="@+id/octocatView"
+            android:fontFamily="sans-serif-thin"
+            android:minHeight="35dp"
+            android:minWidth="70dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/background_material_dark" />
 
         <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:fontFamily="sans-serif-thin"
-                android:textColor="@color/background_material_dark"
-                android:text="Loading..."
-                android:id="@+id/daysTextView"
-                android:layout_margin="7dp"
-                android:layout_marginLeft="0dp"
-                android:layout_below="@+id/commitsView" android:layout_alignRight="@+id/commitsView"
-                android:layout_alignEnd="@+id/commitsView"/>
+            android:id="@+id/totalTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_alignBaseline="@+id/total"
+            android:layout_alignBottom="@+id/total"
+            android:layout_toEndOf="@+id/total"
+            android:fontFamily="sans-serif-thin"
+            android:gravity="center_vertical|left"
+            android:minHeight="35dp"
+            android:minWidth="35dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/background_material_dark" />
+
+        <TextView
+            android:id="@+id/days"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_alignTop="@+id/totalTextView"
+            android:layout_toStartOf="@+id/daysTextView"
+            android:fontFamily="sans-serif-thin"
+            android:gravity="center_vertical|right"
+            android:minHeight="35dp"
+            android:minWidth="70dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/background_material_dark" />
+
+        <TextView
+            android:id="@+id/daysTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_alignBaseline="@+id/days"
+            android:layout_alignBottom="@+id/days"
+            android:layout_alignEnd="@+id/commitsView"
+            android:layout_marginEnd="7dp"
+            android:fontFamily="sans-serif-thin"
+            android:gravity="center_vertical|left"
+            android:minHeight="35dp"
+            android:minWidth="70dp"
+            android:text="Loading..."
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/background_material_dark" />
     </RelativeLayout>
 
 </FrameLayout>

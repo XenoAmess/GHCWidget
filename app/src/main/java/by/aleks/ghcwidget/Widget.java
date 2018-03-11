@@ -28,6 +28,7 @@ import by.aleks.ghcwidget.data.CommitsBase;
 import by.aleks.ghcwidget.data.Day;
 
 public class Widget extends AppWidgetProvider {
+    public static final int MAX_MONTHS = 100;
 
     public static final int STATUS_OFFLINE = 0;
     public static final int STATUS_NOTFOUND = 1;
@@ -50,10 +51,13 @@ public class Widget extends AppWidgetProvider {
     private boolean startOnMonday;
     private boolean showDaysLabel;
 
+    //below added by XenoAmess
+    private int weeksColumns;
+    private int weeksRows;
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        if(this.appWidgetIds==null)
+        if (this.appWidgetIds == null)
             this.appWidgetIds = appWidgetIds;
         updateWidget(context);
         super.onUpdate(context, appWidgetManager, appWidgetIds);
@@ -69,7 +73,7 @@ public class Widget extends AppWidgetProvider {
 
                 online = intent.getBooleanExtra(LOAD_DATA_KEY, true); //Set the flag of online/caching mode
                 AppWidgetManager appWM = AppWidgetManager.getInstance(context);
-                if(this.appWidgetIds==null)
+                if (this.appWidgetIds == null)
                     this.appWidgetIds = appWM.getAppWidgetIds(intent.getComponent());
 
                 updateWidget(context);
@@ -101,7 +105,7 @@ public class Widget extends AppWidgetProvider {
         // First find out rows and columns based on width provided.
         int rows = getCellsForSize(minHeight);
         int columns = getCellsForSize(minWidth);
-        if(resized){
+        if (resized) {
             adjustMonthsNum(context, columns, rows);
             resized = false;
         }
@@ -128,9 +132,9 @@ public class Widget extends AppWidgetProvider {
         return n - 1;
     }
 
-    private void updateWidget(Context context){
+    private void updateWidget(Context context) {
 
-        if(this.context == null)
+        if (this.context == null)
             this.context = context;
 
         AppWidgetManager mgr = AppWidgetManager.getInstance(context);
@@ -148,39 +152,58 @@ public class Widget extends AppWidgetProvider {
 
         setPreferences(context);
         Bitmap bitmap = processImage(context);
-        if(bitmap!=null)
+        if (bitmap != null)
             remoteViews.setImageViewBitmap(R.id.commitsView, bitmap);
 
-        switch (status){
-            case STATUS_OFFLINE: printMessage(context.getResources().getString(R.string.loading_error));
+        switch (status) {
+            case STATUS_OFFLINE:
+                printMessage(context.getResources().getString(R.string.loading_error));
                 break;
-            case STATUS_NOTFOUND: printMessage(context.getResources().getString(R.string.not_found));
+            case STATUS_NOTFOUND:
+                printMessage(context.getResources().getString(R.string.not_found));
                 break;
         }
 
-        if(appWidgetIds != null){
-            for (int appWidgetId : appWidgetIds){
+        if (appWidgetIds != null) {
+            for (int appWidgetId : appWidgetIds) {
                 setClickIntent(context, appWidgetId);
             }
         }
     }
 
 
-    private void setPreferences(Context context){
+    private void setPreferences(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         username = prefs.getString("username", "xRoker");
-        try{
-            months = Integer.parseInt(prefs.getString("months", "5"));
-            if(months>12 || months<1)
-                months = 12;
-        } catch (Exception e){
-            months = 5;
-        }
+//        try {
+//            months = Integer.parseInt(prefs.getString("months", "5"));
+//            if (months < 1)
+//                months = 1;
+//            if (months > MAX_MONTHS)
+//                months = MAX_MONTHS;
+//        } catch (Exception e) {
+//            months = 5;
+//        }
         theme = prefs.getString("color_theme", ColorTheme.GITHUB);
         startOnMonday = prefs.getBoolean("start_on_monday", false);
         showDaysLabel = prefs.getBoolean("days_labels", true);
-        Log.d(TAG, "Preferences updated: " + username + " " + months + " " + theme);
 
+        try {
+            weeksColumns = Integer.parseInt(prefs.getString("weeks_columns", "30"));
+            if (weeksColumns < 1)
+                weeksColumns = 1;
+        } catch (Exception e) {
+            weeksColumns = 17;
+        }
+//        try {
+//            weeksRows = Integer.parseInt(prefs.getString("weeks_rows", "1"));
+//            if (weeksRows < 1)
+//                weeksRows = 1;
+//        } catch (Exception e) {
+//            weeksRows = 3;
+//        }
+
+        Log.d(TAG, "Preferences updated: " + username + " " + theme);
     }
 
     //On click open the preferences activity
@@ -199,35 +222,35 @@ public class Widget extends AppWidgetProvider {
 
     }
 
-    private void updateInfoBar(CommitsBase base){
+    private void updateInfoBar(CommitsBase base) {
         remoteViews.setTextViewText(R.id.total, String.valueOf(base.commitsNumber()));
         remoteViews.setTextViewText(R.id.totalTextView, context.getString(R.string.total));
         int streak = base.currentStreak();
         remoteViews.setTextViewText(R.id.days, String.valueOf(streak));
-        if(streak == 1){
+        if (streak == 1) {
             remoteViews.setTextViewText(R.id.daysTextView, context.getString(R.string.day));
         } else remoteViews.setTextViewText(R.id.daysTextView, context.getString(R.string.days));
     }
 
     // Load data from GitHub and generate a bitmap with commits.
-    private Bitmap processImage(Context context){
+    private Bitmap processImage(Context context) {
 
-        if(base == null || online){
+        if (base == null || online) {
             CommitsBase refreshedBase = loadData(context, username);
-            if (refreshedBase != null){
+            if (refreshedBase != null) {
                 base = refreshedBase;
                 updateInfoBar(base);
             } else return null;
         }
 
         Point size = getScreenSize(context);
-        int weeks = 4*months+1;
-        return createBitmap(base, weeks, size, theme);
+        //int weeks = 4 * months + 1;
+        return createBitmap(base, size, theme);
     }
 
 
     //Load data from the api using AsyncTask.
-    private CommitsBase loadData(Context context, String username){
+    private CommitsBase loadData(Context context, String username) {
         String prefDataKey = "offline_data";
         GitHubAPITask task = new GitHubAPITask(this, context);
 
@@ -237,23 +260,21 @@ public class Widget extends AppWidgetProvider {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor editor = prefs.edit();
             // If the widget have to be updated online, load data and save it to SharedPreferences
-            if(online || !prefs.contains(prefDataKey)){
+            if (online || !prefs.contains(prefDataKey)) {
                 data = task.execute(username).get();
-                if(data!=null){
+                if (data != null) {
                     editor.putString(prefDataKey, data);
                     editor.commit();
                 }
             } else data = prefs.getString(prefDataKey, null);
             return GitHubAPITask.parseResult(data);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             task.cancel(true);
             return null;
         }
     }
 
-    private Point getScreenSize(Context context){
+    private Point getScreenSize(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
@@ -262,18 +283,22 @@ public class Widget extends AppWidgetProvider {
     }
 
 
-    private Bitmap createBitmap(CommitsBase base, int weeksNumber, Point size, String theme){
+    private Bitmap createBitmap(CommitsBase base, Point size, String theme) {
         float SPACE_RATIO = 0.1f;
         int TEXT_GRAPH_SPACE = 7;
 
         float daysLabelSpaceRatio = showDaysLabel ? 0.8f : 0;
 
 
-        float side = size.x/(weeksNumber+daysLabelSpaceRatio) * (1-SPACE_RATIO);
-        float space = size.x/(weeksNumber+daysLabelSpaceRatio) - side;
-        float textSize = side*0.87f;
+        float side = size.x / (weeksColumns + daysLabelSpaceRatio) * (1 - SPACE_RATIO);
+        float space = size.x / (weeksColumns + daysLabelSpaceRatio) - side;
+        float textSize = side * 0.87f;
 
-        int height = (int)(7*(side+space)+textSize+TEXT_GRAPH_SPACE);
+        int heightPerRow = (int) (7 * (side + space) + textSize + TEXT_GRAPH_SPACE);
+
+        weeksRows = size.y / heightPerRow;
+
+        int height = heightPerRow * weeksRows;
 
         ColorTheme colorTheme = new ColorTheme();
 
@@ -288,105 +313,136 @@ public class Widget extends AppWidgetProvider {
         paintText.setTextSize(textSize);
         paintText.setColor(Color.GRAY);
 
-        if(base!=null){
+        if (base != null) {
+            float initx = 0;
+            float inity = 0;
             float x = 0, y;
 
             // Draw days labels.
-            if(showDaysLabel){
-                y = startOnMonday ? textSize*2+TEXT_GRAPH_SPACE : textSize*2+TEXT_GRAPH_SPACE+side;
-                canvas.drawText(context.getString(R.string.m), 0, y, paintText);
-                canvas.drawText(context.getString(R.string.w), 0, y+2*(side+space), paintText);
-                canvas.drawText(context.getString(R.string.f), textSize*0.1f, y+4*(side+space), paintText);
-                if(startOnMonday)
-                    canvas.drawText(context.getString(R.string.s), textSize*0.1f, y+6*(side+space), paintText);
-
-                x = textSize;
+            if (showDaysLabel) {
+                y = startOnMonday ? textSize * 2 + TEXT_GRAPH_SPACE : textSize * 2 + TEXT_GRAPH_SPACE + side;
+                initx = x = textSize;
             }
 
-            y = textSize+TEXT_GRAPH_SPACE;
 
             ArrayList<ArrayList<Day>> weeks = base.getWeeks();
 
-            int firstWeek = base.getFirstWeekOfMonth(weeksNumber); //Number of the week above which there will be the first month name.
+            int weeksNum = Math.min(weeks.size(), weeksColumns * weeksRows);
 
-            for(int i = weeks.size() - weeksNumber; i<weeks.size(); i++){
+            int firstWeek = base.getFirstWeekOfMonth(weeksNum); //Number of the week above which there will be the first month name.
 
-                // Set the position and draw a month name.
-                if( (firstWeek!=-1 && (i-weeks.size()+firstWeek)%4 == 0 && i!=weeks.size()-1) || firstWeek==i){
-                    canvas.drawText(weeks.get(i).get(1).getMonthName(), x, textSize, paintText);
+
+            y = textSize + TEXT_GRAPH_SPACE;
+
+            outerloop:
+            for (int i = weeks.size() - weeksNum; i < weeks.size(); ) {
+                x = initx;
+                inity = y;
+
+                if (showDaysLabel) {
+                    y += 2 * side + space;
+                    canvas.drawText(context.getString(R.string.m), 0, y, paintText);
+                    canvas.drawText(context.getString(R.string.w), 0, y + 2 * (side + space), paintText);
+                    canvas.drawText(context.getString(R.string.f), textSize * 0.1f, y + 4 * (side + space), paintText);
+                    if (startOnMonday)
+                        canvas.drawText(context.getString(R.string.s), textSize * 0.1f, y + 6 * (side + space), paintText);
+                    initx = x = textSize;
+                    y -= 2 * side + space;
                 }
 
-                for (Day day : weeks.get(i)){
-
-                    if(startOnMonday && weeks.get(i).indexOf(day)==0)
-                        continue;
-
-                    paint.setColor(colorTheme.getColor(theme, day.getLevel()));
-                    canvas.drawRect(x, y, x+side, y+side, paint);
-                    y = y + side + space;
-                }
-                if(startOnMonday){
-                    try {
-                        paint.setColor(colorTheme.getColor(theme, weeks.get(i + 1).get(0).getLevel()));
-                    } catch (IndexOutOfBoundsException e) {
-                        break;
+                for (int j = i; i < j + weeksColumns; i++) {
+                    if (i >= weeks.size()) {
+                        break outerloop;
                     }
-                    canvas.drawRect(x, y, x+side, y+side, paint);
-                    y = y + side + space;
+                    // Set the position and draw a month name.
+                    if ((firstWeek != -1 && (i - weeks.size() + firstWeek) % 4 == 0 && i != weeks.size() - 1) || firstWeek == i) {
+                        canvas.drawText(weeks.get(i).get(1).getMonthName(), x, inity - (textSize + TEXT_GRAPH_SPACE) + textSize, paintText);
+                    }
+
+                    for (Day day : weeks.get(i)) {
+                        if (startOnMonday && weeks.get(i).indexOf(day) == 0)
+                            continue;
+                        paint.setColor(colorTheme.getColor(theme, day.getLevel()));
+                        canvas.drawRect(x, y, x + side, y + side, paint);
+                        y = y + side + space;
+                    }
+                    if (startOnMonday) {
+                        try {
+                            paint.setColor(colorTheme.getColor(theme, weeks.get(i + 1).get(0).getLevel()));
+                        } catch (IndexOutOfBoundsException e) {
+                            break;
+                        }
+                        canvas.drawRect(x, y, x + side, y + side, paint);
+                        y = y + side + space;
+                    }
+                    y = inity;
+                    x = x + side + space;
                 }
-                y = textSize+TEXT_GRAPH_SPACE;
-                x = x + side + space;
+                y += heightPerRow;
             }
         }
 
         return bitmap;
     }
 
-    private void adjustMonthsNum(Context context, int numColumns, int numRows){
+    private void adjustMonthsNum(Context context, int numColumns, int numRows) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
-        if(numRows > 1){
-            switch (numColumns){
-                case 2: editor.putString("months", "2");
+        if (numRows > 1) {
+            switch (numColumns) {
+                case 2:
+                    editor.putString("months", "2");
                     break;
-                case 3: editor.putString("months", "4");
+                case 3:
+                    editor.putString("months", "4");
                     break;
-                case 4: editor.putString("months", "5");
+                case 4:
+                    editor.putString("months", "5");
                     break;
-                case 5: editor.putString("months", "5");
+                case 5:
+                    editor.putString("months", "5");
                     break;
-                case 6: editor.putString("months", "7");
+                case 6:
+                    editor.putString("months", "7");
                     break;
-                case 8: editor.putString("months", "9");
+                case 8:
+                    editor.putString("months", "9");
                     break;
-                default: editor.putString("months", "12");
+                default:
+                    editor.putString("months", "12");
             }
         } else {
-            switch (numColumns){
-                case 2: editor.putString("months", "2");
+            switch (numColumns) {
+                case 2:
+                    editor.putString("months", "2");
                     break;
-                case 3: editor.putString("months", "5");
+                case 3:
+                    editor.putString("months", "5");
                     break;
-                case 4: editor.putString("months", "6");
+                case 4:
+                    editor.putString("months", "6");
                     break;
-                case 5: editor.putString("months", "7");
+                case 5:
+                    editor.putString("months", "7");
                     break;
-                case 6: editor.putString("months", "11");
+                case 6:
+                    editor.putString("months", "11");
                     break;
-                default: editor.putString("months", "12");
+                default:
+                    editor.putString("months", "12");
             }
         }
         editor.commit();
     }
 
-    private void printMessage(String msg){
+    private void printMessage(String msg) {
         remoteViews.setTextViewText(R.id.total, "");
         remoteViews.setTextViewText(R.id.totalTextView, "");
         remoteViews.setTextViewText(R.id.days, "");
         remoteViews.setTextViewText(R.id.daysTextView, msg);
     }
 
-    public void setStatus(int status){
+    public void setStatus(int status) {
         this.status = status;
     }
 

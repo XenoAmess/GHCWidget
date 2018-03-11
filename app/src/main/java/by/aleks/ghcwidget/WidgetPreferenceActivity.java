@@ -32,7 +32,7 @@ public class WidgetPreferenceActivity extends PreferenceActivity {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
-        ListPreference themePref = (ListPreference)findPreference("color_theme");
+        ListPreference themePref = (ListPreference) findPreference("color_theme");
         themePref.setEntries(ColorTheme.getThemeNames());
         themePref.setEntryValues(ColorTheme.getThemeNames());
         themePref.setDefaultValue(ColorTheme.BLUE);
@@ -40,7 +40,10 @@ public class WidgetPreferenceActivity extends PreferenceActivity {
         //Set up the Listener.
         findPreference("username").setOnPreferenceChangeListener(onPreferenceChange);
         findPreference("color_theme").setOnPreferenceChangeListener(onPreferenceChange);
-        findPreference("months").setOnPreferenceChangeListener(onPreferenceChange);
+        //findPreference("months").setOnPreferenceChangeListener(onPreferenceChange);
+        findPreference("weeks_columns").setOnPreferenceChangeListener(onPreferenceChange);
+//        findPreference("weeks_rows").setOnPreferenceChangeListener(onPreferenceChange);
+
         findPreference("start_on_monday").setOnPreferenceChangeListener(onPreferenceChange);
         findPreference("days_labels").setOnPreferenceChangeListener(onPreferenceChange);
 
@@ -80,11 +83,11 @@ public class WidgetPreferenceActivity extends PreferenceActivity {
             updateWidget(true);
     }
 
-    protected void displayLoginButton(){
+    protected void displayLoginButton() {
         String cookies = CookieManager.getInstance().getCookie(getString(R.string.login_url));
         PreferenceScreen screen = getPreferenceScreen();
         // If there are logged in cookies, show the "logout" button, otherwise show "login" button
-        if(cookies != null && cookies.split(";")[0].equals("logged_in=yes")){
+        if (cookies != null && cookies.split(";")[0].equals("logged_in=yes")) {
             screen.removePreference(loginPref);
             screen.addPreference(logoutPref);
             updateWidget(true);
@@ -95,19 +98,17 @@ public class WidgetPreferenceActivity extends PreferenceActivity {
     }
 
     @SuppressWarnings("deprecation")
-    private void clearCookies()
-    {
+    private void clearCookies() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // Using ClearCookies code for API >= Lollipop
             CookieManager.getInstance().removeAllCookies(null);
             CookieManager.getInstance().flush();
-        } else
-        {
+        } else {
             // Using ClearCookies code for API < Lollipop
-            CookieSyncManager cookieSyncMngr=CookieSyncManager.createInstance(this);
+            CookieSyncManager cookieSyncMngr = CookieSyncManager.createInstance(this);
             cookieSyncMngr.startSync();
-            CookieManager cookieManager=CookieManager.getInstance();
+            CookieManager cookieManager = CookieManager.getInstance();
             cookieManager.removeAllCookie();
             cookieManager.removeSessionCookie();
             cookieSyncMngr.stopSync();
@@ -125,8 +126,8 @@ public class WidgetPreferenceActivity extends PreferenceActivity {
             String key = preference.getKey();
 
             // Exit if the username is invalid
-            if(preference.getKey().equals("username")){
-                if(!isUsernameValid((String)newValue)){
+            if (preference.getKey().equals("username")) {
+                if (!isUsernameValid((String) newValue)) {
                     alert("Invalid username");
                     return false;
                 }
@@ -150,14 +151,12 @@ public class WidgetPreferenceActivity extends PreferenceActivity {
                     updateWidget(preference.getKey().equals("username"));
 
                     finish();
-                }
-                else {
+                } else {
                     Log.d(TAG, "Intent Extras is null");
 
                     return false;
                 }
-            }
-            else {
+            } else {
                 Log.d(TAG, "Intent Action is: {" + activityIntent.getAction() + "} and not: " + CONFIGURE_ACTION);
 
                 return false;
@@ -177,13 +176,12 @@ public class WidgetPreferenceActivity extends PreferenceActivity {
         sendBroadcast(updateIntent);
     }
 
-    private boolean isUsernameValid(String value){
+    private boolean isUsernameValid(String value) {
         return value.matches("[a-zA-Z0-9-]+");
     }
 
 
-    public void alert (String msg)
-    {
+    public void alert(String msg) {
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
     }
 }
