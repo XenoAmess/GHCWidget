@@ -444,7 +444,13 @@ public class Widget extends AppWidgetProvider {
                         }
 
                         if (base.getDays().get(i).getCalendar().get(Calendar.DAY_OF_MONTH) == 1) {
-                            canvas.drawText(base.getDays().get(i).getMonthName(), x, inity - (textSize + TEXT_GRAPH_SPACE) + textSize, paintText);
+                            String drawTest;
+                            if (base.getDays().get(i).getCalendar().get(Calendar.MONTH) == 0) {
+                                drawTest = "" + base.getDays().get(i).getCalendar().get(Calendar.YEAR);
+                            } else {
+                                drawTest = base.getDays().get(i).getMonthName();
+                            }
+                            canvas.drawText(drawTest, x, inity - (textSize + TEXT_GRAPH_SPACE) + textSize, paintText);
                         }
 
                         paint.setColor(colorTheme.getColor(theme, base.getDays().get(i).getLevel()));
