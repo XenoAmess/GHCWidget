@@ -44,8 +44,8 @@ public class WidgetPreferenceActivity extends PreferenceActivity {
         findPreference("weeks_columns").setOnPreferenceChangeListener(onPreferenceChange);
 //        findPreference("weeks_rows").setOnPreferenceChangeListener(onPreferenceChange);
 
-        findPreference("start_on_monday").setOnPreferenceChangeListener(onPreferenceChange);
-        findPreference("days_labels").setOnPreferenceChangeListener(onPreferenceChange);
+//        findPreference("start_on_monday").setOnPreferenceChangeListener(onPreferenceChange);
+//        findPreference("days_labels").setOnPreferenceChangeListener(onPreferenceChange);
 
 
         loginPref = findPreference("login");

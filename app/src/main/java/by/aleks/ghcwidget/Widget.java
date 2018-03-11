@@ -8,22 +8,31 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.RemoteViews;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import by.aleks.ghcwidget.api.GitHubAPITask;
 import by.aleks.ghcwidget.data.ColorTheme;
@@ -182,7 +191,7 @@ public class Widget extends AppWidgetProvider {
 
     private void setPreferences(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        username = prefs.getString("username", "xRoker");
+        username = prefs.getString("username", "XenoAmess");
 //        try {
 //            months = Integer.parseInt(prefs.getString("months", "5"));
 //            if (months < 1)
@@ -193,8 +202,8 @@ public class Widget extends AppWidgetProvider {
 //            months = 5;
 //        }
         theme = prefs.getString("color_theme", ColorTheme.GITHUB);
-        startOnMonday = prefs.getBoolean("start_on_monday", false);
-        showDaysLabel = prefs.getBoolean("days_labels", true);
+//        startOnMonday = prefs.getBoolean("start_on_monday", false);
+//        showDaysLabel = prefs.getBoolean("days_labels", true);
 
         try {
             weeksColumns = Integer.parseInt(prefs.getString("weeks_columns", "30"));
@@ -230,7 +239,28 @@ public class Widget extends AppWidgetProvider {
 
     }
 
+
+//    public static Bitmap getBitmap(String path) {
+//        Bitmap bitmap = null;
+//        try {
+//            URL url = new URL(path);
+//            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//            conn.setConnectTimeout(5000);
+//            conn.setRequestMethod("GET");
+//            if (conn.getResponseCode() == 200) {
+//                InputStream inputStream = conn.getInputStream();
+//                bitmap = BitmapFactory.decodeStream(inputStream);
+//                return bitmap;
+//            }
+//            return null;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return bitmap;
+//    }
+
     private void updateInfoBar(CommitsBase base) {
+//        remoteViews.setImageViewBitmap(R.id.octocatView, getBitmap("https://avatars.githubusercontent.com/" + username));
         remoteViews.setTextViewText(R.id.total, String.valueOf(base.commitsNumber()));
         remoteViews.setTextViewText(R.id.totalTextView, context.getString(R.string.total));
         int streak = base.currentStreak();
@@ -373,10 +403,10 @@ public class Widget extends AppWidgetProvider {
 
             y = textSize + TEXT_GRAPH_SPACE;
 
-            int tmpi = 0;
-            if (startOnMonday) tmpi = 1;
-            int startPos = base.findStartPos(base.getDays().size() - daysNum, tmpi);
-//            int startPos = base.getDays().size() - daysNum;
+//            int tmpi = 0;
+//            if (startOnMonday) tmpi = 1;
+//            int startPos = base.findStartPos(base.getDays().size() - daysNum, tmpi);
+            int startPos = base.getDays().size() - daysNum;
 
             outerloop:
             for (int i = startPos; i < base.getDays().size(); ) {
@@ -385,18 +415,18 @@ public class Widget extends AppWidgetProvider {
 
                 if (showDaysLabel) {
                     y += 2 * side + space;
-                    if (startOnMonday) {
-                        y -= side + space;
-                    }
+//                    if (startOnMonday) {
+//                        y -= side + space;
+//                    }
                     canvas.drawText(context.getString(R.string.m), 0, y, paintText);
                     canvas.drawText(context.getString(R.string.w), 0, y + 2 * (side + space), paintText);
                     canvas.drawText(context.getString(R.string.f), textSize * 0.1f, y + 4 * (side + space), paintText);
-                    if (startOnMonday)
-                        canvas.drawText(context.getString(R.string.s), textSize * 0.1f, y + 6 * (side + space), paintText);
+//                    if (startOnMonday)
+//                        canvas.drawText(context.getString(R.string.s), textSize * 0.1f, y + 6 * (side + space), paintText);
                     initx = x = textSize;
-                    if (startOnMonday) {
-                        y += side + space;
-                    }
+//                    if (startOnMonday) {
+//                        y += side + space;
+//                    }
                     y -= 2 * side + space;
                 }
 
@@ -422,7 +452,7 @@ public class Widget extends AppWidgetProvider {
 
                         //
 
-                        canvas.drawText("" + base.getDays().get(i).getCalendar().get(Calendar.DAY_OF_WEEK), x, y, paintText);
+//                        canvas.drawText("" + base.getDays().get(i).getDayOfWeek(), x, y, paintText);
 
                         //
 

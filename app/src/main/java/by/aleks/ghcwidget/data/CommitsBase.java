@@ -1,7 +1,6 @@
 package by.aleks.ghcwidget.data;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  * Created by Alex on 12/8/14.
@@ -42,13 +41,12 @@ public class CommitsBase {
         return days;
     }
 
-    public int findStartPos(int startIndex, int weekdayNeed) {
-        while (startIndex < days.size()) {
-            if (days.get(startIndex).getDayOfWeek() == weekdayNeed)
-                return startIndex;
-            startIndex++;
-        }
-        return 0;
-//        return startIndex;
-    }
+//    public int findStartPos(int startIndex, int weekdayNeed) {
+//        while (startIndex < days.size()) {
+//            if (days.get(startIndex).getDayOfWeek() == weekdayNeed)
+//                return startIndex;
+//            startIndex++;
+//        }
+//        return 0;
+//    }
 }

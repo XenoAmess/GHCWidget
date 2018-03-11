@@ -28,13 +28,13 @@
     <!--android:numeric="integer"-->
     <!--android:title="@string/weeks_rows" />-->
 
-    <CheckBoxPreference
-        android:key="start_on_monday"
-        android:title="Start week on Monday" />
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="days_labels"
-        android:title="Show days of week" />
+    <!--<CheckBoxPreference-->
+        <!--android:key="start_on_monday"-->
+        <!--android:title="Start week on Monday" />-->
+    <!--<CheckBoxPreference-->
+        <!--android:defaultValue="true"-->
+        <!--android:key="days_labels"-->
+        <!--android:title="Show days of week" />-->
 
     <Preference
         android:key="login"
