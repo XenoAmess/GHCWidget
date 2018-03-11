@@ -4,15 +4,20 @@ GitHub Contributions Widget
 ### Description
 This simple widget shows your contribution activity over a chosen amount of time. It has a few different color themes to better fit your homescreen style.
 
-<a href="https://play.google.com/store/apps/details?id=by.aleks.ghcwidget">
-  <img alt="Get it on Google Play"
-       src="https://developer.android.com/images/brand/en_generic_rgb_wo_60.png" />
-</a>
+<!--
+  <a href="https://play.google.com/store/apps/details?id=by.aleks.ghcwidget">
+    <img alt="Get it on Google Play"
+         src="https://developer.android.com/images/brand/en_generic_rgb_wo_60.png" />
+  </a>
+-->
 
 ### Screenshots
 
 <div id="pics" style=display:inline>
-<img src="https://lh5.ggpht.com/GNIOcJ1qYu-NqMkRKcjtDSiFbLANNexYiNgwr6g3MNHpvXDAWF0zTw1OfGHIwV4HqZw=h310">
+  <img src="https://raw.githubusercontent.com/XenoAmess/GHCWidget/master/pic/Screenshot_2018-03-12-01-18-42.png">
+  <img src="https://raw.githubusercontent.com/XenoAmess/GHCWidget/master/pic/Screenshot_2018-03-12-01-18-29.png">
+  <img src="https://raw.githubusercontent.com/XenoAmess/GHCWidget/master/pic/Screenshot_2018-03-12-01-18-07.png">
+  <img src="https://raw.githubusercontent.com/XenoAmess/GHCWidget/master/pic/Screenshot_2018-03-12-01-20-29.png">
 </div>
 
 
