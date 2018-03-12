@@ -80,7 +80,7 @@ public class WidgetPreferenceActivity extends PreferenceActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // On successful login update widget
+        // On successful login update widget1
         if (resultCode == RESULT_OK)
             updateWidget(true);
     }
@@ -89,7 +89,7 @@ public class WidgetPreferenceActivity extends PreferenceActivity {
         String cookies = CookieManager.getInstance().getCookie(getString(R.string.login_url));
         PreferenceScreen screen = getPreferenceScreen();
         // If there are logged in cookies, show the "logout" button, otherwise show "login" button
-        if (cookies != null && cookies.split(";")[0].equals("logged_in=yes")) {
+        if (cookies != null && !cookies.isEmpty()) {
             screen.removePreference(loginPref);
             screen.addPreference(logoutPref);
             updateWidget(true);
@@ -119,7 +119,7 @@ public class WidgetPreferenceActivity extends PreferenceActivity {
     }
 
     /**
-     * When the user changes the preferences, update the widget.
+     * When the user changes the preferences, update the widget1.
      */
     private OnPreferenceChangeListener onPreferenceChange = new Preference.OnPreferenceChangeListener() {
         @Override
@@ -143,13 +143,13 @@ public class WidgetPreferenceActivity extends PreferenceActivity {
                     int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
                             AppWidgetManager.INVALID_APPWIDGET_ID);
 
-                    //Put the widget ID into the extras and let the activity caller know the result is ok.
+                    //Put the widget1 ID into the extras and let the activity caller know the result is ok.
                     Intent result = new Intent();
                     result.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 
                     setResult(RESULT_OK, result);
                     Log.d(TAG, preference.getTitle().toString());
-                    //Update the widget.
+                    //Update the widget1.
                     updateWidget(preference.getKey().equals("username"));
 
                     finish();
@@ -169,7 +169,7 @@ public class WidgetPreferenceActivity extends PreferenceActivity {
     };
 
     /**
-     * Send an intent to update the widget.
+     * Send an intent to update the widget1.
      */
     private void updateWidget(boolean online) {
         Intent updateIntent = new Intent(android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE,

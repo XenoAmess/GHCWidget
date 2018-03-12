@@ -16,8 +16,28 @@
             </intent-filter>
 
             <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget" />
+                android:name="android.appwidget.provider1"
+                android:resource="@xml/widget1" />
+        </receiver>
+        <receiver android:name="com.xenoamess.partaker.Widget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider2"
+                android:resource="@xml/widget2" />
+        </receiver>
+        <receiver android:name="com.xenoamess.partaker.Widget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider3"
+                android:resource="@xml/widget3" />
         </receiver>
 
         <activity
