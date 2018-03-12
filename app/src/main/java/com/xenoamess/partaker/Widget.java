@@ -128,7 +128,7 @@ public class Widget extends AppWidgetProvider {
     }
 
     /**
-     * Returns number of cells needed for given size of the widget1.
+     * Returns number of cells needed for given size of the widget.
      *
      * @param size Widget size in dp.
      * @return Size in number of cells.
@@ -156,7 +156,7 @@ public class Widget extends AppWidgetProvider {
         int minHeight = options
                 .getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
 
-        // Obtain appropriate widget1 and update it.
+        // Obtain appropriate widget and update it.
         remoteViews = getRemoteViews(context, minWidth, minHeight);
 
         setPreferences(context);
@@ -301,7 +301,7 @@ public class Widget extends AppWidgetProvider {
                 String prefDataKey = prefDataKeyHead + "_" + year;
                 String data;
 
-                // If the widget1 have to be updated online, load data and save it to SharedPreferences
+                // If the widget have to be updated online, load data and save it to SharedPreferences
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                 SharedPreferences.Editor editor = prefs.edit();
                 if (online || !prefs.contains(prefDataKey)) {
