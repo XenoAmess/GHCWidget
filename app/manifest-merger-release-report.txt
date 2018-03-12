@@ -25,7 +25,7 @@ MERGED from com.android.support:support-v4:21.0.2:16:5
 		ADDED from AndroidManifest.xml:6:18
 	android:theme
 		ADDED from AndroidManifest.xml:7:18
-receiver#by.aleks.ghcwidget.Widget
+receiver#com.xenoamess.partaker.Widget
 ADDED from AndroidManifest.xml:9:9
 	android:name
 		ADDED from AndroidManifest.xml:9:19
@@ -45,7 +45,7 @@ ADDED from AndroidManifest.xml:14:13
 		ADDED from AndroidManifest.xml:14:66
 	android:name
 		ADDED from AndroidManifest.xml:14:24
-activity#by.aleks.ghcwidget.WidgetPreferenceActivity
+activity#com.xenoamess.partaker.WidgetPreferenceActivity
 ADDED from AndroidManifest.xml:17:9
 	android:exported
 		ADDED from AndroidManifest.xml:17:60

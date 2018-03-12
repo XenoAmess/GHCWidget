@@ -1,4 +1,4 @@
-package by.aleks.ghcwidget;
+package com.xenoamess.partaker;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.xenoamess.partaker.R;
 
 public class LoginActivity extends ActionBarActivity {
 

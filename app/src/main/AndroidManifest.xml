@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="by.aleks.ghcwidget">
+    package="com.xenoamess.partaker">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -9,7 +9,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <receiver android:name="by.aleks.ghcwidget.Widget">
+        <receiver android:name="com.xenoamess.partaker.Widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
@@ -21,13 +21,13 @@
         </receiver>
 
         <activity
-            android:name="by.aleks.ghcwidget.WidgetPreferenceActivity"
+            android:name="com.xenoamess.partaker.WidgetPreferenceActivity"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
-        <activity android:name="by.aleks.ghcwidget.LoginActivity"></activity>
+        <activity android:name="com.xenoamess.partaker.LoginActivity"></activity>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package by.aleks.ghcwidget;
+package com.xenoamess.partaker;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -8,36 +8,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.RemoteViews;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
-import by.aleks.ghcwidget.api.GitHubAPITask;
-import by.aleks.ghcwidget.data.ColorTheme;
-import by.aleks.ghcwidget.data.CommitsBase;
-import by.aleks.ghcwidget.data.Day;
+import com.xenoamess.partaker.R;
+
+import com.xenoamess.partaker.api.GitHubAPITask;
+import com.xenoamess.partaker.data.ColorTheme;
+import com.xenoamess.partaker.data.CommitsBase;
 
 public class Widget extends AppWidgetProvider {
     public static final int MAX_MONTHS = 100;

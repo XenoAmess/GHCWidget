@@ -1,4 +1,4 @@
-package by.aleks.ghcwidget;
+package com.xenoamess.partaker;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

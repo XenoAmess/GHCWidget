@@ -1,4 +1,4 @@
-package by.aleks.ghcwidget.api;
+package com.xenoamess.partaker.api;
 
 import android.content.Context;
 import android.util.Log;
@@ -18,9 +18,9 @@ import org.apache.http.protocol.HttpContext;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
-import by.aleks.ghcwidget.R;
+import com.xenoamess.partaker.R;
 
-import static by.aleks.ghcwidget.Widget.NOW_YEAR;
+import static com.xenoamess.partaker.Widget.NOW_YEAR;
 
 public class GitHubHelper {
 

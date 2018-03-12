@@ -1,4 +1,4 @@
-package by.aleks.ghcwidget.data;
+package com.xenoamess.partaker.data;
 
 import android.graphics.Color;
 

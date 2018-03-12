@@ -1,4 +1,4 @@
-package by.aleks.ghcwidget.api;
+package com.xenoamess.partaker.api;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
-import by.aleks.ghcwidget.Widget;
-import by.aleks.ghcwidget.data.CommitsBase;
-import by.aleks.ghcwidget.data.Day;
+import com.xenoamess.partaker.Widget;
+import com.xenoamess.partaker.data.CommitsBase;
+import com.xenoamess.partaker.data.Day;
 
 public class GitHubAPITask extends AsyncTask<String, Integer, String> // Username to the input, Progress, Output
 {

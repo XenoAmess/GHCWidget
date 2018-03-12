@@ -1,4 +1,4 @@
-package by.aleks.ghcwidget;
+package com.xenoamess.partaker;
 
 /**
  * Created by Alex on 12/7/14.
@@ -19,7 +19,9 @@ import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.widget.Toast;
 
-import by.aleks.ghcwidget.data.ColorTheme;
+import com.xenoamess.partaker.R;
+
+import com.xenoamess.partaker.data.ColorTheme;
 
 public class WidgetPreferenceActivity extends PreferenceActivity {
     private static final String TAG = "GHCW";
@@ -52,7 +54,7 @@ public class WidgetPreferenceActivity extends PreferenceActivity {
         loginPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent loginIntent = new Intent().setClassName(WidgetPreferenceActivity.this, "by.aleks.ghcwidget.LoginActivity");
+                Intent loginIntent = new Intent().setClassName(WidgetPreferenceActivity.this, "com.xenoamess.partaker.LoginActivity");
                 startActivity(loginIntent);
                 return true;
             }

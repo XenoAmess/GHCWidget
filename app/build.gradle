@@ -5,8 +5,8 @@ android {
     buildToolsVersion '26.0.2'
 
     defaultConfig {
-//        applicationId "com.xenoamess.www/ghcwidget"
-        applicationId "by.aleks.ghcwidget"
+//        applicationId "com.xenoamess.www/com.xenoamess.partaker"
+        applicationId "com.xenoamess.partaker"
         minSdkVersion 21
         targetSdkVersion 21
         versionCode 7

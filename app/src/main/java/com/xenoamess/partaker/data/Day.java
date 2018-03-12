@@ -1,4 +1,4 @@
-package by.aleks.ghcwidget.data;
+package com.xenoamess.partaker.data;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
