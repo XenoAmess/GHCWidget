@@ -19,9 +19,8 @@ import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.widget.Toast;
 
-import com.xenoamess.partaker.R;
-
 import com.xenoamess.partaker.data.ColorTheme;
+import com.xenoamess.partaker.data.ModuleManager;
 
 public class WidgetPreferenceActivity extends PreferenceActivity {
     private static final String TAG = "GHCW";
@@ -39,9 +38,16 @@ public class WidgetPreferenceActivity extends PreferenceActivity {
         themePref.setEntryValues(ColorTheme.getThemeNames());
         themePref.setDefaultValue(ColorTheme.BLUE);
 
+        ListPreference modulePref = (ListPreference) findPreference("module_name");
+        modulePref.setEntries(ModuleManager.getModuleNames());
+        modulePref.setEntryValues(ModuleManager.getModuleNames());
+        modulePref.setDefaultValue(ModuleManager.GITHUB);
+
         //Set up the Listener.
         findPreference("username").setOnPreferenceChangeListener(onPreferenceChange);
         findPreference("color_theme").setOnPreferenceChangeListener(onPreferenceChange);
+        findPreference("module_name").setOnPreferenceChangeListener(onPreferenceChange);
+
         //findPreference("months").setOnPreferenceChangeListener(onPreferenceChange);
         findPreference("weeks_columns").setOnPreferenceChangeListener(onPreferenceChange);
 //        findPreference("weeks_rows").setOnPreferenceChangeListener(onPreferenceChange);

@@ -14,10 +14,10 @@ This simple widget shows your contribution activity over a chosen amount of time
 ### Screenshots
 
 <div id="pics" style=display:inline>
-  <img src="https://raw.githubusercontent.com/XenoAmess/GHCWidget/master/pic/Screenshot_2018-03-12-01-18-42.png">
-  <img src="https://raw.githubusercontent.com/XenoAmess/GHCWidget/master/pic/Screenshot_2018-03-12-01-18-29.png">
-  <img src="https://raw.githubusercontent.com/XenoAmess/GHCWidget/master/pic/Screenshot_2018-03-12-01-18-07.png">
-  <img src="https://raw.githubusercontent.com/XenoAmess/GHCWidget/master/pic/Screenshot_2018-03-12-01-20-29.png">
+  <img src="https://raw.githubusercontent.com/XenoAmess/Partaker/master/pic/Screenshot_2018-03-12-01-18-42.png">
+  <img src="https://raw.githubusercontent.com/XenoAmess/Partaker/master/pic/Screenshot_2018-03-12-01-18-29.png">
+  <img src="https://raw.githubusercontent.com/XenoAmess/Partaker/master/pic/Screenshot_2018-03-12-01-18-07.png">
+  <img src="https://raw.githubusercontent.com/XenoAmess/Partaker/master/pic/Screenshot_2018-03-12-01-20-29.png">
 </div>
 
 

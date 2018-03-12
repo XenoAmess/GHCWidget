@@ -25,7 +25,7 @@ public class GitHubHelper {
 
     private static final int HTTP_STATUS_OK = 200;
     private static byte[] buff = new byte[1024];
-    private static final String logTag = "GHCWidget";
+    private static final String logTag = "Partaker";
 
     public static int NOW_YEAR;
 

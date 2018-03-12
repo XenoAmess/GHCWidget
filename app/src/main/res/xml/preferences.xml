@@ -2,10 +2,16 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ListPreference
-        android:dialogTitle="module"
-        android:key="module"
+        android:dialogTitle="Module"
+        android:key="module_name"
         android:summary="Select which Module to use."
         android:title="Module" />
+    <!--<ListPreference-->
+        <!--android:dialogTitle="Module"-->
+        <!--android:key="module_name"-->
+        <!--android:summary="Select which Module to use."-->
+        <!--android:title="Module" />-->
+
 
     <EditTextPreference
         android:dialogTitle="@string/username_pref_dialog"

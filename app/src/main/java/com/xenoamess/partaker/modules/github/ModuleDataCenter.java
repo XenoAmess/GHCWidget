@@ -3,32 +3,24 @@ package com.xenoamess.partaker.modules.github;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.Typeface;
 import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 
 import com.xenoamess.partaker.R;
 import com.xenoamess.partaker.Widget;
-import com.xenoamess.partaker.api.APITask;
-import com.xenoamess.partaker.data.ColorTheme;
 import com.xenoamess.partaker.data.CommitsBase;
-import com.xenoamess.partaker.modules.ModuleDataCenter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
  * Created by sfeq on 2018/3/13.
  */
 
-public class GithubModuleDataCenter extends ModuleDataCenter {
-    public static CommitsBase loadData(Widget widget, Context context, String username) {
+public class ModuleDataCenter extends com.xenoamess.partaker.modules.ModuleDataCenter {
+    public CommitsBase loadData(Widget widget, Context context, String username) {
         int requiredDaySize = widget.getDaySize(context);
         int nowDaySize = 0;
 
@@ -73,11 +65,11 @@ public class GithubModuleDataCenter extends ModuleDataCenter {
         }
     }
 
-    public static Bitmap processImage(Widget widget) {
+    public Bitmap processImage(Widget widget) {
         Context context = widget.getContext();
         CommitsBase base = widget.getBase();
         if (base == null || widget.isOnline()) {
-            CommitsBase refreshedBase = GithubModuleDataCenter.loadData(widget, context, widget.getUsername());
+            CommitsBase refreshedBase = loadData(widget, context, widget.getUsername());
             if (refreshedBase != null) {
                 base = refreshedBase;
                 updateInfoBar(widget, base);
@@ -90,7 +82,7 @@ public class GithubModuleDataCenter extends ModuleDataCenter {
     }
 
 
-    public static void updateInfoBar(Widget widget, CommitsBase base) {
+    public void updateInfoBar(Widget widget, CommitsBase base) {
         RemoteViews remoteViews = widget.getRemoteViews();
         remoteViews.setTextViewText(R.id.total, String.valueOf(base.commitsNumber()));
         remoteViews.setTextViewText(R.id.totalTextView, widget.getContext().getString(R.string.total));

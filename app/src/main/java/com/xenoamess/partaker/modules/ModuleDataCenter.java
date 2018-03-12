@@ -1,5 +1,8 @@
 package com.xenoamess.partaker.modules;
 
+import android.graphics.Bitmap;
+
+import com.xenoamess.partaker.Widget;
 import com.xenoamess.partaker.api.APITask;
 
 /**
@@ -7,6 +10,6 @@ import com.xenoamess.partaker.api.APITask;
  */
 
 public abstract class ModuleDataCenter {
-//    public abstract APITask buildAPITask();
-
+    //    public abstract APITask buildAPITask();
+    public abstract Bitmap processImage(Widget widget);
 }

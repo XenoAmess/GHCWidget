@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class CommitsBase {
 
-    private ArrayList<Day> days = new ArrayList<>();
+    private ArrayList<Day> days = new ArrayList<Day>();
     private int commitsNumberSum = 0;
 
     public void addDay(Day day) {

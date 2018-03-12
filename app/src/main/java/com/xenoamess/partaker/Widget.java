@@ -20,15 +20,12 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.widget.RemoteViews;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
-import com.xenoamess.partaker.modules.github.GitHubAPITask;
 import com.xenoamess.partaker.data.ColorTheme;
 import com.xenoamess.partaker.data.CommitsBase;
-import com.xenoamess.partaker.modules.github.GithubModuleDataCenter;
+import com.xenoamess.partaker.data.ModuleManager;
+import com.xenoamess.partaker.modules.github.ModuleDataCenter;
 
 public class Widget extends AppWidgetProvider {
     public static final int MAX_MONTHS = 100;
@@ -37,7 +34,10 @@ public class Widget extends AppWidgetProvider {
     public static final int STATUS_NOTFOUND = 1;
     public static final int STATUS_ONLINE = 2;
 
-    private static final String TAG = "GHCWidget";
+    private com.xenoamess.partaker.modules.ModuleDataCenter moduleDataCenter;
+    private String moduleName;
+
+    private static final String TAG = "Partaker";
     private RemoteViews remoteViews;
     private CommitsBase base;
     private int status = STATUS_ONLINE;
@@ -143,7 +143,6 @@ public class Widget extends AppWidgetProvider {
     }
 
     private void updateWidget(Context context) {
-
         if (this.context == null)
             this.context = context;
 
@@ -194,12 +193,42 @@ public class Widget extends AppWidgetProvider {
 //        } catch (Exception e) {
 //            months = 5;
 //        }
-        theme = prefs.getString("color_theme", ColorTheme.GITHUB);
+        theme = prefs.getString("color_theme", null);
+        if (theme == null) {
+            prefs.edit().putString("color_theme", ColorTheme.GITHUB).commit();
+            theme = ColorTheme.GITHUB;
+        }
+
+        moduleName = prefs.getString("module_name", null);
+        if (moduleName == null) {
+            prefs.edit().putString("module_name", ModuleManager.GITHUB).commit();
+            moduleName = ModuleManager.GITHUB;
+        }
+//        Log.d(TAG, "IANHERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR!    " + moduleName + ".ModuleDataCenter");
+        try {
+            Class<?> moduleClass = Class.forName(moduleName + ".ModuleDataCenter");
+            moduleDataCenter = (com.xenoamess.partaker.modules.ModuleDataCenter) moduleClass.newInstance();
+
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+
+
 //        startOnMonday = prefs.getBoolean("start_on_monday", false);
 //        showDaysLabel = prefs.getBoolean("days_labels", true);
 
         try {
-            weeksColumns = Integer.parseInt(prefs.getString("weeks_columns", "30"));
+            String tmps = prefs.getString("weeks_columns", null);
+            if (tmps == null) {
+                prefs.edit().putString("weeks_columns", "30").commit();
+                tmps = "30";
+            }
+            weeksColumns = Integer.parseInt(tmps);
             if (weeksColumns < 1)
                 weeksColumns = 1;
         } catch (Exception e) {
@@ -234,7 +263,7 @@ public class Widget extends AppWidgetProvider {
 
     // Load data and generate a bitmap with commits.
     private Bitmap processImage() {
-        return GithubModuleDataCenter.processImage(this);
+        return moduleDataCenter.processImage(this);
     }
 
     public Point getScreenSize(Context context) {
