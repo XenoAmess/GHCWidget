@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <ListPreference
+        android:dialogTitle="module"
+        android:key="module"
+        android:summary="Select which Module to use."
+        android:title="Module" />
+
     <EditTextPreference
         android:dialogTitle="@string/username_pref_dialog"
         android:key="username"

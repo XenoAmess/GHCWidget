@@ -25,11 +25,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.xenoamess.partaker.R;
-
-import com.xenoamess.partaker.api.GitHubAPITask;
+import com.xenoamess.partaker.modules.github.GitHubAPITask;
 import com.xenoamess.partaker.data.ColorTheme;
 import com.xenoamess.partaker.data.CommitsBase;
+import com.xenoamess.partaker.modules.github.GithubModuleDataCenter;
 
 public class Widget extends AppWidgetProvider {
     public static final int MAX_MONTHS = 100;
@@ -43,7 +42,8 @@ public class Widget extends AppWidgetProvider {
     private CommitsBase base;
     private int status = STATUS_ONLINE;
     private int[] appWidgetIds;
-    private boolean resized = false;
+
+    //    private boolean resized = false;
     private boolean online;
     private Context context;
     public static final String LOAD_DATA_KEY = "load_data";
@@ -62,7 +62,6 @@ public class Widget extends AppWidgetProvider {
     public static final float SPACE_RATIO = 0.1f;
     public static final int TEXT_GRAPH_SPACE = 7;
 
-    public static int NOW_YEAR;
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -96,9 +95,9 @@ public class Widget extends AppWidgetProvider {
     public void onAppWidgetOptionsChanged(Context context,
                                           AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
 
-        resized = true;
+//        resized = true;
         updateWidget(context);
-        setClickIntent(context, appWidgetId);
+        setClickIntent(appWidgetId);
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
     }
 
@@ -109,15 +108,17 @@ public class Widget extends AppWidgetProvider {
      * @param minHeight
      * @return
      */
-    private RemoteViews getRemoteViews(Context context, int minWidth,
+    private RemoteViews getRemoteViews(int minWidth,
                                        int minHeight) {
         // First find out rows and columns based on width provided.
         int rows = getCellsForSize(minHeight);
         int columns = getCellsForSize(minWidth);
-        if (resized) {
-            adjustMonthsNum(context, columns, rows);
-            resized = false;
-        }
+
+//        if (resized) {
+//            adjustMonthsNum(context, columns, rows);
+//            resized = false;
+//        }
+
         if (rows == 1)
             return new RemoteViews(context.getPackageName(), R.layout.one_row);
         if (columns > 2) {
@@ -157,10 +158,10 @@ public class Widget extends AppWidgetProvider {
                 .getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
 
         // Obtain appropriate widget and update it.
-        remoteViews = getRemoteViews(context, minWidth, minHeight);
+        remoteViews = getRemoteViews(minWidth, minHeight);
 
-        setPreferences(context);
-        Bitmap bitmap = processImage(context);
+        setPreferences();
+        Bitmap bitmap = processImage();
         if (bitmap != null)
             remoteViews.setImageViewBitmap(R.id.commitsView, bitmap);
 
@@ -175,13 +176,13 @@ public class Widget extends AppWidgetProvider {
 
         if (appWidgetIds != null) {
             for (int appWidgetId : appWidgetIds) {
-                setClickIntent(context, appWidgetId);
+                setClickIntent(appWidgetId);
             }
         }
     }
 
 
-    private void setPreferences(Context context) {
+    private void setPreferences() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         username = prefs.getString("username", "XenoAmess");
 //        try {
@@ -216,7 +217,7 @@ public class Widget extends AppWidgetProvider {
     }
 
     //On click open the preferences activity
-    private void setClickIntent(Context context, int appWidgetId) {
+    private void setClickIntent(int appWidgetId) {
 
         Intent launchActivity = new Intent(context, WidgetPreferenceActivity.class);
         launchActivity.setAction("android.appwidget.action.APPWIDGET_CONFIGURE");
@@ -231,101 +232,12 @@ public class Widget extends AppWidgetProvider {
 
     }
 
-
-//    public static Bitmap getBitmap(String path) {
-//        Bitmap bitmap = null;
-//        try {
-//            URL url = new URL(path);
-//            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//            conn.setConnectTimeout(5000);
-//            conn.setRequestMethod("GET");
-//            if (conn.getResponseCode() == 200) {
-//                InputStream inputStream = conn.getInputStream();
-//                bitmap = BitmapFactory.decodeStream(inputStream);
-//                return bitmap;
-//            }
-//            return null;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return bitmap;
-//    }
-
-    private void updateInfoBar(CommitsBase base) {
-//        remoteViews.setImageViewBitmap(R.id.octocatView, getBitmap("https://avatars.githubusercontent.com/" + username));
-        remoteViews.setTextViewText(R.id.total, String.valueOf(base.commitsNumber()));
-        remoteViews.setTextViewText(R.id.totalTextView, context.getString(R.string.total));
-        int streak = base.currentStreak();
-        remoteViews.setTextViewText(R.id.days, String.valueOf(streak));
-        if (streak == 1) {
-            remoteViews.setTextViewText(R.id.daysTextView, context.getString(R.string.day));
-        } else remoteViews.setTextViewText(R.id.daysTextView, context.getString(R.string.days));
+    // Load data and generate a bitmap with commits.
+    private Bitmap processImage() {
+        return GithubModuleDataCenter.processImage(this);
     }
 
-    // Load data from GitHub and generate a bitmap with commits.
-    private Bitmap processImage(Context context) {
-
-        if (base == null || online) {
-            CommitsBase refreshedBase = loadData(context, username);
-            if (refreshedBase != null) {
-                base = refreshedBase;
-                updateInfoBar(base);
-            } else return null;
-        }
-
-        Point size = getScreenSize(context);
-        //int weeks = 4 * months + 1;
-        return createBitmap(base, size, theme);
-    }
-
-
-    //Load data from the api using AsyncTask.
-    private CommitsBase loadData(Context context, String username) {
-        int requiredDaySize = getDaySize(context);
-        int nowDaySize = 0;
-
-        GitHubAPITask task = null;
-        try {
-            status = STATUS_ONLINE;
-            ArrayList<String> dataStrings = new ArrayList<String>();
-
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
-            Date curDate = new Date(System.currentTimeMillis());
-            NOW_YEAR = Integer.parseInt(formatter.format(curDate));
-            int year = NOW_YEAR;
-
-            final String prefDataKeyHead = "offline_data";
-
-            while (requiredDaySize >= 0) {
-                task = new GitHubAPITask(this, context, year);
-                String prefDataKey = prefDataKeyHead + "_" + year;
-                String data;
-
-                // If the widget have to be updated online, load data and save it to SharedPreferences
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                SharedPreferences.Editor editor = prefs.edit();
-                if (online || !prefs.contains(prefDataKey)) {
-                    data = task.execute(username).get();
-                    if (data != null) {
-                        editor.putString(prefDataKey, data);
-                        editor.commit();
-                    }
-                } else data = prefs.getString(prefDataKey, null);
-                dataStrings.add(data);
-
-                if (year != NOW_YEAR)
-                    requiredDaySize -= (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) ? 366 : 365;
-                year--;
-            }
-            return GitHubAPITask.parseResult(dataStrings);
-        } catch (Exception e) {
-            if (task != null)
-                task.cancel(true);
-            return null;
-        }
-    }
-
-    private Point getScreenSize(Context context) {
+    public Point getScreenSize(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
@@ -333,7 +245,7 @@ public class Widget extends AppWidgetProvider {
         return size;
     }
 
-    private int getRowSize(Context context) {
+    public int getRowSize(Context context) {
         Point size = new Point();
         ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getSize(size);
         float daysLabelSpaceRatio = showDaysLabel ? 0.8f : 0;
@@ -344,12 +256,12 @@ public class Widget extends AppWidgetProvider {
         return size.y / heightPerRow;
     }
 
-    private int getDaySize(Context context) {
+    public int getDaySize(Context context) {
         return weeksColumns * getRowSize(context) * 7;
     }
 
 
-    private Bitmap createBitmap(CommitsBase base, Point size, String theme) {
+    public Bitmap createBitmap(CommitsBase base, Point size) {
 
         float daysLabelSpaceRatio = showDaysLabel ? 0.8f : 0;
 
@@ -469,55 +381,55 @@ public class Widget extends AppWidgetProvider {
         //return Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888);
     }
 
-    private void adjustMonthsNum(Context context, int numColumns, int numRows) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = prefs.edit();
-        if (numRows > 1) {
-            switch (numColumns) {
-                case 2:
-                    editor.putString("months", "2");
-                    break;
-                case 3:
-                    editor.putString("months", "4");
-                    break;
-                case 4:
-                    editor.putString("months", "5");
-                    break;
-                case 5:
-                    editor.putString("months", "5");
-                    break;
-                case 6:
-                    editor.putString("months", "7");
-                    break;
-                case 8:
-                    editor.putString("months", "9");
-                    break;
-                default:
-                    editor.putString("months", "12");
-            }
-        } else {
-            switch (numColumns) {
-                case 2:
-                    editor.putString("months", "2");
-                    break;
-                case 3:
-                    editor.putString("months", "5");
-                    break;
-                case 4:
-                    editor.putString("months", "6");
-                    break;
-                case 5:
-                    editor.putString("months", "7");
-                    break;
-                case 6:
-                    editor.putString("months", "11");
-                    break;
-                default:
-                    editor.putString("months", "12");
-            }
-        }
-        editor.commit();
-    }
+//    private void adjustMonthsNum(Context context, int numColumns, int numRows) {
+//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+//        SharedPreferences.Editor editor = prefs.edit();
+//        if (numRows > 1) {
+//            switch (numColumns) {
+//                case 2:
+//                    editor.putString("months", "2");
+//                    break;
+//                case 3:
+//                    editor.putString("months", "4");
+//                    break;
+//                case 4:
+//                    editor.putString("months", "5");
+//                    break;
+//                case 5:
+//                    editor.putString("months", "5");
+//                    break;
+//                case 6:
+//                    editor.putString("months", "7");
+//                    break;
+//                case 8:
+//                    editor.putString("months", "9");
+//                    break;
+//                default:
+//                    editor.putString("months", "12");
+//            }
+//        } else {
+//            switch (numColumns) {
+//                case 2:
+//                    editor.putString("months", "2");
+//                    break;
+//                case 3:
+//                    editor.putString("months", "5");
+//                    break;
+//                case 4:
+//                    editor.putString("months", "6");
+//                    break;
+//                case 5:
+//                    editor.putString("months", "7");
+//                    break;
+//                case 6:
+//                    editor.putString("months", "11");
+//                    break;
+//                default:
+//                    editor.putString("months", "12");
+//            }
+//        }
+//        editor.commit();
+//    }
 
     private void printMessage(String msg) {
         remoteViews.setTextViewText(R.id.total, "");
@@ -528,6 +440,30 @@ public class Widget extends AppWidgetProvider {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public boolean getOnline() {
+        return online;
+    }
+
+    public CommitsBase getBase() {
+        return base;
+    }
+
+    public boolean isOnline() {
+        return online;
+    }
+
+    public RemoteViews getRemoteViews() {
+        return remoteViews;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public Context getContext() {
+        return context;
     }
 
 }

@@ -54,7 +54,7 @@ public class WidgetPreferenceActivity extends PreferenceActivity {
         loginPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent loginIntent = new Intent().setClassName(WidgetPreferenceActivity.this, "com.xenoamess.partaker.LoginActivity");
+                Intent loginIntent = new Intent().setClassName(WidgetPreferenceActivity.this, "com.xenoamess.partaker.modules.github.LoginActivity");
                 startActivity(loginIntent);
                 return true;
             }

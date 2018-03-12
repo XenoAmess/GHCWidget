@@ -1,7 +1,9 @@
-package com.xenoamess.partaker.api;
+package com.xenoamess.partaker.modules.github;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -14,10 +16,11 @@ import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 import com.xenoamess.partaker.Widget;
+import com.xenoamess.partaker.api.APITask;
 import com.xenoamess.partaker.data.CommitsBase;
 import com.xenoamess.partaker.data.Day;
 
-public class GitHubAPITask extends AsyncTask<String, Integer, String> // Username to the input, Progress, Output
+public class GitHubAPITask extends APITask // Username to the input, Progress, Output
 {
 
     private static final String debugTag = "GHCWiget";
@@ -27,10 +30,13 @@ public class GitHubAPITask extends AsyncTask<String, Integer, String> // Usernam
     private int year;
 
     public GitHubAPITask(Widget widget, Context context, int year) {
+        super();
         this.widget = widget;
         this.context = context;
         this.year = year;
     }
+
+
 
 
     // Call the downloading method in background and load data
@@ -122,4 +128,6 @@ public class GitHubAPITask extends AsyncTask<String, Integer, String> // Usernam
 
         return task.execute().get();
     }
+
+
 }

@@ -27,7 +27,7 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
-        <activity android:name="com.xenoamess.partaker.LoginActivity"></activity>
+        <activity android:name="com.xenoamess.partaker.modules.github.LoginActivity"></activity>
     </application>
 
 </manifest>

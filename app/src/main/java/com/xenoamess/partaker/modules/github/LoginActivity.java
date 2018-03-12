@@ -1,4 +1,4 @@
-package com.xenoamess.partaker;
+package com.xenoamess.partaker.modules.github;
 
 import android.content.Intent;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package com.xenoamess.partaker.api;
+package com.xenoamess.partaker.modules.github;
 
 import android.content.Context;
 import android.util.Log;
@@ -20,13 +20,14 @@ import java.io.InputStream;
 
 import com.xenoamess.partaker.R;
 
-import static com.xenoamess.partaker.Widget.NOW_YEAR;
 
 public class GitHubHelper {
 
     private static final int HTTP_STATUS_OK = 200;
     private static byte[] buff = new byte[1024];
     private static final String logTag = "GHCWidget";
+
+    public static int NOW_YEAR;
 
     public static class ApiException extends Exception {
         private static final long serialVersionUID = 1L;
