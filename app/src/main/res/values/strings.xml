@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GHCWidget</string>
+    <string name="app_name">Partaker</string>
     <string name="login_to_github">Log in to GitHub</string>
 
     <string name="login_url">https://github.com/login</string>
