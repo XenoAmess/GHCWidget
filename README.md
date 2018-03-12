@@ -22,7 +22,7 @@ This simple widget shows your contribution activity over a chosen amount of time
 
 
 ### Author
-Fork and remake from [xRoker/GHCWidget]("https://github.com/xRoker/GHCWidget"){:target="_blank"}.
+Fork and remake from [xRoker/GHCWidget](https://github.com/xRoker/GHCWidget "https://github.com/xRoker/GHCWidget")
 As a forked and remaked project,it has several authors.The original project's author is xRoker.And I,Xeno Amess,serves as this fork's author.
 
 
