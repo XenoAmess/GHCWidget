@@ -206,7 +206,7 @@ public class Widget extends AppWidgetProvider {
         }
 //        Log.d(TAG, "IANHERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR!    " + moduleName + ".ModuleDataCenter");
         try {
-            Class<?> moduleClass = Class.forName(moduleName + ".ModuleDataCenter");
+            Class<?> moduleClass = Class.forName("com.xenoamess.partaker.modules." + moduleName + ".ModuleDataCenter");
             moduleDataCenter = (com.xenoamess.partaker.modules.ModuleDataCenter) moduleClass.newInstance();
 
 

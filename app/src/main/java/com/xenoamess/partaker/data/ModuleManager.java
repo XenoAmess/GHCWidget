@@ -10,8 +10,8 @@ import java.util.HashMap;
  */
 
 public class ModuleManager {
-    public static String GITHUB = "com.xenoamess.partaker.modules.github";
-    public static String CODEFORCES = "com.xenoamess.partaker.modules.codeforces";
+    public static String GITHUB = "github";
+    public static String CODEFORCES = "codeforces";
 
 //    public static ArrayList<CharSequence> MODULE_NAMES;
 //
