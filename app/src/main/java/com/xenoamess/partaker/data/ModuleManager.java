@@ -2,8 +2,6 @@ package com.xenoamess.partaker.data;
 
 import android.graphics.Color;
 
-import com.xenoamess.partaker.modules.ModuleDataCenter;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -12,8 +10,8 @@ import java.util.HashMap;
  */
 
 public class ModuleManager {
-    public static String GITHUB = "github";
-    public static String CODEFORCES = "codeforces";
+    public static String GITHUB = "com.xenoamess.partaker.modules.github";
+    public static String CODEFORCES = "com.xenoamess.partaker.modules.codeforces";
 
 //    public static ArrayList<CharSequence> MODULE_NAMES;
 //
@@ -23,18 +21,12 @@ public class ModuleManager {
 //        MODULE_NAMES.add(CODEFORCES);
 //    }
 
-    public static HashMap<String, ModuleDataCenter> ModuleDataCenterMap = new HashMap<String, ModuleDataCenter>();
-    static {
-        ModuleDataCenterMap.put(GITHUB, new com.xenoamess.partaker.modules.github.ModuleDataCenter());
-    }
-
-
-    public static ModuleDataCenter GetModuleDataCenter(String name) {
-        return ModuleDataCenterMap.get(name);
-    }
-
     public static CharSequence[] getModuleNames() {
+
         return new CharSequence[]{GITHUB, CODEFORCES};
+        //return MODULE_NAMES.toArray(new CharSequence[10]);
+
+//        return new CharSequence[]{ColorTheme.GITHUB, ColorTheme.MODERN, ColorTheme.GRAY, ColorTheme.RED, ColorTheme.BLUE, ColorTheme.PURPLE, ColorTheme.ORANGE, ColorTheme.HALLOWEEN};
     }
 
 

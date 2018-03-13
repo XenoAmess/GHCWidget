@@ -23,9 +23,6 @@
     <string name="f">F</string>
     <string name="s">S</string>
 
-    <string name="accepted">accepted</string>
-
-
     <!-- Below added by XenoAmess -->
     <string name="weeks_columns">Number of weeks to display in one row</string>
     <!--<string name="weeks_rows">Number of weeks-lines to display</string>-->
