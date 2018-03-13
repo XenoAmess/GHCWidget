@@ -289,7 +289,7 @@ public class Widget extends AppWidgetProvider {
         return weeksColumns * getRowSize(context) * 7;
     }
 
-
+/*
     public Bitmap createBitmap(CommitsBase base, Point size) {
 
         float daysLabelSpaceRatio = showDaysLabel ? 0.8f : 0;
@@ -409,6 +409,7 @@ public class Widget extends AppWidgetProvider {
 
         //return Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888);
     }
+*/
 
 //    private void adjustMonthsNum(Context context, int numColumns, int numRows) {
 //        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -495,4 +496,19 @@ public class Widget extends AppWidgetProvider {
         return context;
     }
 
+    public String getTheme() {
+        return theme;
+    }
+
+    public void setWeeksRows(int weeksRows) {
+        this.weeksRows = weeksRows;
+    }
+
+    public boolean isShowDaysLabel() {
+        return showDaysLabel;
+    }
+
+    public int getWeeksColumns() {
+        return weeksColumns;
+    }
 }

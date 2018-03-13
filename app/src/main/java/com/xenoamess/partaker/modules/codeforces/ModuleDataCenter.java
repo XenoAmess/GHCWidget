@@ -74,9 +74,9 @@ public class ModuleDataCenter extends com.xenoamess.partaker.modules.ModuleDataC
 
     public void updateInfoBar(Widget widget, CommitsBase base) {
         RemoteViews remoteViews = widget.getRemoteViews();
-        remoteViews.setTextViewText(R.id.total, String.valueOf(base.commitsNumber()));
+        remoteViews.setTextViewText(R.id.total, String.valueOf(base.getNumber1()));
         remoteViews.setTextViewText(R.id.totalTextView, widget.getContext().getString(R.string.total));
-        int streak = base.currentStreak();
+        int streak = base.getNumber2();
         remoteViews.setTextViewText(R.id.days, String.valueOf(streak));
         if (streak == 1) {
             remoteViews.setTextViewText(R.id.daysTextView, widget.getContext().getString(R.string.day));
