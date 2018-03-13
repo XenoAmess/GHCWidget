@@ -168,16 +168,14 @@ public class Widget extends AppWidgetProvider {
 
     private void setPreferences() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        username = prefs.getString("username", "XenoAmess");
-//        try {
-//            months = Integer.parseInt(prefs.getString("months", "5"));
-//            if (months < 1)
-//                months = 1;
-//            if (months > MAX_MONTHS)
-//                months = MAX_MONTHS;
-//        } catch (Exception e) {
-//            months = 5;
-//        }
+        username = prefs.getString("username", "Xeno_Amess");
+
+        username = prefs.getString("username", null);
+        if (username == null) {
+            prefs.edit().putString("username", "Xeno_Amess").commit();
+            username = "Xeno_Amess";
+        }
+
         theme = prefs.getString("color_theme", null);
         if (theme == null) {
             prefs.edit().putString("color_theme", ColorTheme.GITHUB).commit();
@@ -186,8 +184,8 @@ public class Widget extends AppWidgetProvider {
 
         moduleName = prefs.getString("module_name", null);
         if (moduleName == null) {
-            prefs.edit().putString("module_name", ModuleManager.GITHUB).commit();
-            moduleName = ModuleManager.GITHUB;
+            prefs.edit().putString("module_name", ModuleManager.CODEFORCES).commit();
+            moduleName = ModuleManager.CODEFORCES;
         }
 //        Log.d(TAG, "IANHERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR!    " + moduleName + ".ModuleDataCenter");
         try {

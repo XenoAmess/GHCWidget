@@ -43,16 +43,13 @@ public class WidgetPreferenceActivity extends PreferenceActivity {
         modulePref.setEntryValues(ModuleManager.getModuleNames());
         modulePref.setDefaultValue(ModuleManager.GITHUB);
 
-        findPreference("username").setDefaultValue("Xeno_Amess");
-        findPreference("weeks_columns").setDefaultValue("30");
-
         //Set up the Listener.
         findPreference("username").setOnPreferenceChangeListener(onPreferenceChange);
         findPreference("color_theme").setOnPreferenceChangeListener(onPreferenceChange);
         findPreference("module_name").setOnPreferenceChangeListener(onPreferenceChange);
-
-        //findPreference("months").setOnPreferenceChangeListener(onPreferenceChange);
         findPreference("weeks_columns").setOnPreferenceChangeListener(onPreferenceChange);
+        //findPreference("months").setOnPreferenceChangeListener(onPreferenceChange);
+
 //        findPreference("weeks_rows").setOnPreferenceChangeListener(onPreferenceChange);
 
 //        findPreference("start_on_monday").setOnPreferenceChangeListener(onPreferenceChange);
