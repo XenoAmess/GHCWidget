@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -20,6 +21,7 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.widget.RemoteViews;
 
+import java.io.InputStream;
 import java.util.Calendar;
 
 import com.xenoamess.partaker.data.ColorTheme;
@@ -35,6 +37,7 @@ public class Widget extends AppWidgetProvider {
     public static final int STATUS_ONLINE = 2;
 
     private com.xenoamess.partaker.modules.ModuleDataCenter moduleDataCenter;
+
     private String moduleName;
 
     private static final String TAG = "Partaker";
@@ -104,28 +107,10 @@ public class Widget extends AppWidgetProvider {
     /**
      * Determine appropriate view based on width provided.
      *
-     * @param minWidth
-     * @param minHeight
      * @return
      */
-    private RemoteViews getRemoteViews(int minWidth,
-                                       int minHeight) {
-        // First find out rows and columns based on width provided.
-        int rows = getCellsForSize(minHeight);
-        int columns = getCellsForSize(minWidth);
-
-//        if (resized) {
-//            adjustMonthsNum(context, columns, rows);
-//            resized = false;
-//        }
-
-        if (rows == 1)
-            return new RemoteViews(context.getPackageName(), R.layout.one_row);
-        if (columns > 2) {
-            return new RemoteViews(context.getPackageName(), R.layout.main);
-        } else {
-            return new RemoteViews(context.getPackageName(), R.layout.small);
-        }
+    private RemoteViews buildRemoteViews() {
+        return new RemoteViews(context.getPackageName(), R.layout.main);
     }
 
     /**
@@ -157,7 +142,7 @@ public class Widget extends AppWidgetProvider {
                 .getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
 
         // Obtain appropriate widget and update it.
-        remoteViews = getRemoteViews(minWidth, minHeight);
+        remoteViews = buildRemoteViews();
 
         setPreferences();
         Bitmap bitmap = processImage();
@@ -468,6 +453,20 @@ public class Widget extends AppWidgetProvider {
         remoteViews.setTextViewText(R.id.daysTextView, msg);
     }
 
+//    public Bitmap getIconBitmap() {
+//        Object iconNameR = null;
+//        try {
+//            iconNameR = R.drawable.class.getDeclaredField(moduleName);
+//        } catch (NoSuchFieldException e) {
+//            e.printStackTrace();
+//        }
+//
+//        InputStream is = context.getResources().openRawResource((Integer) iconNameR);
+//        Bitmap mBitmap = BitmapFactory.decodeStream(is);
+//        return mBitmap;
+//    }
+
+
     public void setStatus(int status) {
         this.status = status;
     }
@@ -511,4 +510,10 @@ public class Widget extends AppWidgetProvider {
     public int getWeeksColumns() {
         return weeksColumns;
     }
+
+
+    public String getModuleName() {
+        return moduleName;
+    }
+
 }

@@ -3,11 +3,14 @@ package com.xenoamess.partaker.modules.codeforces;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 
@@ -99,6 +102,9 @@ public class ModuleDataCenter extends com.xenoamess.partaker.modules.ModuleDataC
         remoteViews.setTextViewText(R.id.totalTextView, widget.getContext().getString(R.string.total));
         remoteViews.setTextViewText(R.id.days, String.valueOf(base.getNumber2()));
         remoteViews.setTextViewText(R.id.daysTextView, widget.getContext().getString(R.string.accepted));
+
+        Drawable is = widget.getContext().getResources().getDrawable(R.drawable.codeforces);
+        remoteViews.setImageViewBitmap(R.id.iconView, ((BitmapDrawable) is).getBitmap());
     }
 
 

@@ -3,11 +3,14 @@ package com.xenoamess.partaker.modules.github;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 
@@ -19,6 +22,7 @@ import com.xenoamess.partaker.data.CommitsBase;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -117,6 +121,10 @@ public class ModuleDataCenter extends com.xenoamess.partaker.modules.ModuleDataC
         } else {
             remoteViews.setTextViewText(R.id.daysTextView, widget.getContext().getString(R.string.days));
         }
+
+
+        Drawable is = widget.getContext().getResources().getDrawable(R.drawable.github);
+        remoteViews.setImageViewBitmap(R.id.iconView, ((BitmapDrawable) is).getBitmap());
     }
 
 

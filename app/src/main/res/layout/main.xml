@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="fill_parent"
-             android:layout_height="fill_parent"
-             android:id="@+id/widget"
-             android:alpha="0.79">
+    android:id="@+id/widget"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:alpha="0.79">
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -16,15 +16,15 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_gravity="center_horizontal|top"
+            android:layout_marginBottom="49dp"
             android:layout_marginLeft="7dp"
             android:layout_marginRight="7dp"
             android:layout_marginTop="7dp"
-            android:layout_marginBottom="49dp"
             android:adjustViewBounds="true"
             android:minHeight="140dp" />
 
         <ImageView
-            android:id="@+id/octocatView"
+            android:id="@+id/iconView"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_alignParentBottom="true"
@@ -32,7 +32,7 @@
             android:layout_marginBottom="7dp"
             android:layout_marginStart="7dp"
             android:alpha="0.8"
-            android:background="@drawable/octocat"
+            android:background="@drawable/github"
             android:minHeight="35dp"
             android:minWidth="35dp" />
 
@@ -40,11 +40,11 @@
             android:id="@+id/total"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:gravity="center_vertical|right"
-            android:layout_alignTop="@+id/octocatView"
+            android:layout_alignTop="@+id/iconView"
             android:layout_marginStart="7dp"
-            android:layout_toEndOf="@+id/octocatView"
+            android:layout_toEndOf="@+id/iconView"
             android:fontFamily="sans-serif-thin"
+            android:gravity="center_vertical|right"
             android:minHeight="35dp"
             android:minWidth="70dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
