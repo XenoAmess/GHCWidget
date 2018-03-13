@@ -81,7 +81,7 @@ public class CodeforcesCommitsBase extends CommitsBase {
         if (acceptedMap.containsKey(i)) {
             res += acceptedMap.get(i) * 5;
         }
-        res /= 12;
+        res /= 20;
         if (res > 4) res = 4;
         return res;
     }

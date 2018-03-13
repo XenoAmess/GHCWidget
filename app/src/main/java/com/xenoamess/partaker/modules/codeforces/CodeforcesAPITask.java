@@ -59,7 +59,6 @@ public class CodeforcesAPITask extends AsyncTask<String, Integer, String> // Use
 
             @Override
             protected CodeforcesCommitsBase doInBackground(Void... params) {
-                Log.d("hhhhhh", "here!!!!!!!!!!!!!!! ");
 
                 TreeMap<Integer, Integer> submitMap = new TreeMap<Integer, Integer>();
                 TreeMap<Integer, Integer> acceptedMap = new TreeMap<Integer, Integer>();
@@ -81,8 +80,8 @@ public class CodeforcesAPITask extends AsyncTask<String, Integer, String> // Use
                         }
 
 
-                        if (thisCommit.getString("verdict") == "OK") {
-                            acceptedMap.put(timestamp, submitMap.get(timestamp) + 1);
+                        if (thisCommit.getString("verdict").equals("OK")) {
+                            acceptedMap.put(timestamp, acceptedMap.get(timestamp) + 1);
                         }
                     }
                 } catch (Exception e) {
