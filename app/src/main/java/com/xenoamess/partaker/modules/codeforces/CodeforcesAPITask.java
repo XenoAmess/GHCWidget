@@ -83,6 +83,8 @@ public class CodeforcesAPITask extends AsyncTask<String, Integer, String> // Use
                         if (thisCommit.getString("verdict").equals("OK")) {
                             if (acceptedMap.containsKey(timestamp)) {
                                 acceptedMap.put(timestamp, acceptedMap.get(timestamp) + 1);
+                            } else {
+                                acceptedMap.put(timestamp, 1);
                             }
                         }
                     }
