@@ -32,9 +32,9 @@
             android:layout_marginBottom="7dp"
             android:layout_marginStart="7dp"
             android:alpha="0.8"
-            android:background="@drawable/github"
             android:minHeight="35dp"
-            android:minWidth="35dp" />
+            android:minWidth="35dp"
+            android:src="@drawable/github" />
 
         <TextView
             android:id="@+id/total"

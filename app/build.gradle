@@ -9,8 +9,8 @@ android {
         applicationId "com.xenoamess.partaker"
         minSdkVersion 21
         targetSdkVersion 21
-        versionCode 7
-        versionName "1.2.1_XenoAmess_1.0"
+        versionCode 8
+        versionName "2.0.0"
     }
     buildTypes {
 //        debug {
