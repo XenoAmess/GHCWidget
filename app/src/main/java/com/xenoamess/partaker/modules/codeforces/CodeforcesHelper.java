@@ -64,11 +64,12 @@ public class CodeforcesHelper {
 
             // execute the request
             HttpResponse response = client.execute(request);
-            StatusLine status = response.getStatusLine();
-            if (status.getStatusCode() != HTTP_STATUS_OK) {
-                // handle error here
-                return "invalid_response";
-            }
+//            StatusLine status = response.getStatusLine();
+//            if (status.getStatusCode() != HTTP_STATUS_OK) {
+//                // handle error here
+//                return "invalid_response";
+//            }
+
 
             // process the content.
             HttpEntity entity = response.getEntity();
