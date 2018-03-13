@@ -19,12 +19,16 @@ import com.xenoamess.partaker.modules.github.GitHubAPITask;
 import com.xenoamess.partaker.modules.github.GitHubCommitsBase;
 import com.xenoamess.partaker.modules.github.GitHubHelper;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TreeMap;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.xenoamess.partaker.Widget.SPACE_RATIO;
 import static com.xenoamess.partaker.Widget.TEXT_GRAPH_SPACE;
 
@@ -37,7 +41,7 @@ public class ModuleDataCenter extends com.xenoamess.partaker.modules.ModuleDataC
     public Bitmap processImage(Widget widget) {
         Context context = widget.getContext();
         CommitsBase base = widget.getBase();
-        if (base == null || base.getClass() != CodeforcesCommitsBase.class || widget.isOnline()) {
+        if (base == null || !base.getClass().equals(CodeforcesCommitsBase.class) || widget.isOnline()) {
             CommitsBase refreshedBase = loadData(widget, context, widget.getUsername());
             if (refreshedBase != null) {
                 base = refreshedBase;
@@ -62,17 +66,22 @@ public class ModuleDataCenter extends com.xenoamess.partaker.modules.ModuleDataC
             String dataString;
 
             final String prefDataKey = "codeforces_cache";
-
+//            context.openFileInput(prefDataKey);
             // If the widget have to be updated online, load data and save it to SharedPreferences
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            SharedPreferences.Editor editor = prefs.edit();
-            if (widget.getOnline() || !prefs.contains(prefDataKey)) {
+            if (widget.getOnline() || !new File(prefDataKey).exists()) {
                 dataString = task.execute(username).get();
                 if (dataString != null) {
-                    editor.putString(prefDataKey, dataString);
-                    editor.commit();
+                    FileOutputStream fos = context.openFileOutput(prefDataKey, MODE_PRIVATE);
+                    fos.write(dataString.getBytes());
+                    fos.close();
                 }
-            } else dataString = prefs.getString(prefDataKey, null);
+            } else {
+                FileInputStream fis = context.openFileInput(prefDataKey);
+                byte[] buffer = new byte[fis.available()];
+                fis.read(buffer);
+                dataString = new String(buffer);
+                fis.close();
+            }
 
             return CodeforcesAPITask.parseResult(dataString);
         } catch (Exception e) {

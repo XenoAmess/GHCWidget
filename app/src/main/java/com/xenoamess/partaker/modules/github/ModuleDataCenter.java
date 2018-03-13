@@ -16,11 +16,15 @@ import com.xenoamess.partaker.Widget;
 import com.xenoamess.partaker.data.ColorTheme;
 import com.xenoamess.partaker.data.CommitsBase;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.xenoamess.partaker.Widget.SPACE_RATIO;
 import static com.xenoamess.partaker.Widget.TEXT_GRAPH_SPACE;
 
@@ -36,9 +40,8 @@ public class ModuleDataCenter extends com.xenoamess.partaker.modules.ModuleDataC
         Context context = widget.getContext();
 
         CommitsBase base = widget.getBase();
-//        || base.getClass() != GitHubCommitsBase.class
 
-        if (base == null || widget.isOnline()) {
+        if (base == null || !base.getClass().equals(GitHubCommitsBase.class) || widget.isOnline()) {
             CommitsBase refreshedBase = loadData(widget, context, widget.getUsername());
             if (refreshedBase != null) {
                 base = refreshedBase;
@@ -67,24 +70,29 @@ public class ModuleDataCenter extends com.xenoamess.partaker.modules.ModuleDataC
             GitHubHelper.NOW_YEAR = Integer.parseInt(formatter.format(curDate));
             int year = GitHubHelper.NOW_YEAR;
 
-            final String prefDataKeyHead = "offline_data";
+            final String prefDataKeyHead = "github_cache";
 
             while (requiredDaySize >= 0) {
                 task = new GitHubAPITask(widget, context, year);
                 String prefDataKey = prefDataKeyHead + "_" + year;
-                String data;
+                String dataString;
 
                 // If the widget have to be updated online, load data and save it to SharedPreferences
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                SharedPreferences.Editor editor = prefs.edit();
-                if (widget.getOnline() || !prefs.contains(prefDataKey)) {
-                    data = task.execute(username).get();
-                    if (data != null) {
-                        editor.putString(prefDataKey, data);
-                        editor.commit();
+                if (widget.getOnline() || !new File(prefDataKey).exists()) {
+                    dataString = task.execute(username).get();
+                    if (dataString != null) {
+                        FileOutputStream fos = context.openFileOutput(prefDataKey, MODE_PRIVATE);
+                        fos.write(dataString.getBytes());
+                        fos.close();
                     }
-                } else data = prefs.getString(prefDataKey, null);
-                dataStrings.add(data);
+                } else {
+                    FileInputStream fis = context.openFileInput(prefDataKey);
+                    byte[] buffer = new byte[fis.available()];
+                    fis.read(buffer);
+                    dataString = new String(buffer);
+                    fis.close();
+                }
+                dataStrings.add(dataString);
 
                 if (year != GitHubHelper.NOW_YEAR)
                     requiredDaySize -= (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) ? 366 : 365;
@@ -238,7 +246,6 @@ public class ModuleDataCenter extends com.xenoamess.partaker.modules.ModuleDataC
         }
 
         return bitmap;
-
 
 
         //return Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888);

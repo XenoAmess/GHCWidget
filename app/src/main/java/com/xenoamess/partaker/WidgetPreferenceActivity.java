@@ -134,12 +134,12 @@ public class WidgetPreferenceActivity extends PreferenceActivity {
             String key = preference.getKey();
 
             // Exit if the username is invalid
-            if (preference.getKey().equals("username")) {
-                if (!isUsernameValid((String) newValue)) {
-                    alert("Invalid username");
-                    return false;
-                }
-            }
+//            if (preference.getKey().equals("username")) {
+//                if (!isUsernameValid((String) newValue)) {
+//                    alert("Invalid username");
+//                    return false;
+//                }
+//            }
 
             Intent activityIntent = getIntent();
             if (CONFIGURE_ACTION.equals(activityIntent.getAction())) {
