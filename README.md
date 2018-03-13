@@ -18,8 +18,21 @@ This simple widget shows your contribution activity over a chosen amount of time
   <img src="https://raw.githubusercontent.com/XenoAmess/Partaker/master/pic/Screenshot_2018-03-12-01-18-29.png">
   <img src="https://raw.githubusercontent.com/XenoAmess/Partaker/master/pic/Screenshot_2018-03-12-01-18-07.png">
   <img src="https://raw.githubusercontent.com/XenoAmess/Partaker/master/pic/Screenshot_2018-03-12-01-20-29.png">
+  <img src="https://raw.githubusercontent.com/XenoAmess/Partaker/master/pic/Screenshot_2018-03-13-20-52-08.png">
 </div>
 
+### improvement to the original software:
+
+1.modulize.
+now you can add more modules to make it work on more websites.
+2.fix some bugs that makes the original software can only push 365 days's data.
+now it can push as much as you wish.
+
+### be careful:
+
+the software is very slow.I know nothing about android,so I could hardly make it faster.
+Be patient.
+and advised to use it under wifi.seems it works badly at mobile network.
 
 ### Author
 Fork and remake from <a href="https://github.com/xRoker/GHCWidget" target="_blank">xRoker/GHCWidget</a>
