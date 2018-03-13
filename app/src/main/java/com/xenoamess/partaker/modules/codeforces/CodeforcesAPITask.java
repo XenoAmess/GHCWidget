@@ -59,18 +59,28 @@ public class CodeforcesAPITask extends AsyncTask<String, Integer, String> // Use
 
             @Override
             protected CodeforcesCommitsBase doInBackground(Void... params) {
+                Log.d("hhhhhh", "here!!!!!!!!!!!!!!! ");
+
                 TreeMap<Integer, Integer> submitMap = new TreeMap<Integer, Integer>();
                 TreeMap<Integer, Integer> acceptedMap = new TreeMap<Integer, Integer>();
 
 
                 try {
                     JSONObject dataBody = new JSONObject(dataString);
+                    if (dataBody == null) return null;
                     JSONArray resultArray = dataBody.getJSONArray("result");
+                    if (resultArray == null) return null;
 //                    String formats = "yyyyMMdd";
-                    for (int i = resultArray.length() - 1; i > 0; i++) {
+                    for (int i = resultArray.length() - 1; i > 0; i--) {
                         JSONObject thisCommit = resultArray.getJSONObject(i);
                         int timestamp = (int) (thisCommit.getLong("creationTimeSeconds") / 86400);
-                        submitMap.put(timestamp, submitMap.get(timestamp) + 1);
+                        if (submitMap.containsKey(timestamp)) {
+                            submitMap.put(timestamp, submitMap.get(timestamp) + 1);
+                        } else {
+                            submitMap.put(timestamp, 1);
+                        }
+
+
                         if (thisCommit.getString("verdict") == "OK") {
                             acceptedMap.put(timestamp, submitMap.get(timestamp) + 1);
                         }

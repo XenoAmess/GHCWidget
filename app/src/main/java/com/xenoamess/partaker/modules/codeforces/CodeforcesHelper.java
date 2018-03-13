@@ -59,7 +59,6 @@ public class CodeforcesHelper {
         DefaultHttpClient client = new DefaultHttpClient();
         HttpGet request = new HttpGet(url);
 
-
         try {
 
             // execute the request

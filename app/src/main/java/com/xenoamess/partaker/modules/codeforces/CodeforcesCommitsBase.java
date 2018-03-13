@@ -74,7 +74,14 @@ public class CodeforcesCommitsBase extends CommitsBase {
     }
 
     public int getLevel(int i) {
-        int res = (submitMap.get(i) + acceptedMap.get(i) * 5) / 12;
+        int res = 0;
+        if (!submitMap.containsKey(i)) return res;
+
+        res += submitMap.get(i);
+        if (acceptedMap.containsKey(i)) {
+            res += acceptedMap.get(i) * 5;
+        }
+        res /= 12;
         if (res > 4) res = 4;
         return res;
     }
