@@ -5,48 +5,21 @@ import java.util.ArrayList;
 /**
  * Created by Alex on 12/8/14.
  */
-public class CommitsBase {
+public abstract class CommitsBase {
+    public abstract int getDaysSize();
 
-    private ArrayList<Day> days = new ArrayList<Day>();
-    private int commitsNumberSum = 0;
+    public abstract int getNumber1();
 
-    public void addDay(Day day) {
-        //Skip the previous year days after a new year.
-        if (days.isEmpty() ||
-                day.getCalendar().compareTo(days.get(days.size() - 1).getCalendar()) > 0) {
-            days.add(day);
-            commitsNumberSum += day.getCommitsNumber();
-        }
-        return;
-    }
+    public abstract int getNumber2();
 
+    public abstract boolean ifFirstDayOfMonth(int i);
 
-    public int commitsNumber() {
-//        int commitsCounter = 0;
-//        for (Day day : days) {
-//            commitsCounter += day.getCommitsNumber();
-//        }
-        return commitsNumberSum;
-    }
+    public abstract boolean ifFirstMonthOfYear(int i);
 
-    public int currentStreak() {
-        for (int i = days.size() - 1; i >= 0; i--) {
-            if (days.get(i).getCommitsNumber() == 0)
-                return days.size() - i - 1;
-        }
-        return days.size();
-    }
+    public abstract String getYearName(int i);
 
-    public ArrayList<Day> getDays() {
-        return days;
-    }
+    public abstract String getMonthName(int i);
 
-//    public int findStartPos(int startIndex, int weekdayNeed) {
-//        while (startIndex < days.size()) {
-//            if (days.get(startIndex).getDayOfWeek() == weekdayNeed)
-//                return startIndex;
-//            startIndex++;
-//        }
-//        return 0;
-//    }
+    public abstract int getLevel(int i);
+
 }

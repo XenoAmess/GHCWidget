@@ -53,10 +53,12 @@ public class Widget extends AppWidgetProvider {
     private int months;
     private String theme;
     private boolean startOnMonday;
+
     private boolean showDaysLabel;
 
     //below added by XenoAmess
     private int weeksColumns;
+
     private int weeksRows;
 
     public static final float SPACE_RATIO = 0.1f;
@@ -96,9 +98,11 @@ public class Widget extends AppWidgetProvider {
                                           AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
 
 //        resized = true;
+        printMessage("onAppWidgetOptionsChanged0");
         updateWidget(context);
         setClickIntent(appWidgetId);
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
+        printMessage("onAppWidgetOptionsChanged1");
     }
 
     /**
@@ -143,6 +147,7 @@ public class Widget extends AppWidgetProvider {
     }
 
     private void updateWidget(Context context) {
+        printMessage("updateWidget0");
         if (this.context == null)
             this.context = context;
 
@@ -178,10 +183,12 @@ public class Widget extends AppWidgetProvider {
                 setClickIntent(appWidgetId);
             }
         }
+        printMessage("updateWidget1");
     }
 
 
     private void setPreferences() {
+        printMessage("setPreferences0");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         username = prefs.getString("username", "XenoAmess");
 //        try {
@@ -205,18 +212,11 @@ public class Widget extends AppWidgetProvider {
             moduleName = ModuleManager.GITHUB;
         }
 //        Log.d(TAG, "IANHERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR!    " + moduleName + ".ModuleDataCenter");
-        try {
-            Class<?> moduleClass = Class.forName(moduleName + ".ModuleDataCenter");
-            moduleDataCenter = (com.xenoamess.partaker.modules.ModuleDataCenter) moduleClass.newInstance();
+
+        moduleDataCenter = ModuleManager.GetModuleDataCenter(moduleName);
+//            moduleDataCenter = (com.xenoamess.partaker.modules.ModuleDataCenter) moduleClass.newInstance();
 
 
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        }
 
 
 //        startOnMonday = prefs.getBoolean("start_on_monday", false);
@@ -243,11 +243,12 @@ public class Widget extends AppWidgetProvider {
 //        }
 
         Log.d(TAG, "Preferences updated: " + username + " " + theme);
+        printMessage("setPreferences1");
     }
 
     //On click open the preferences activity
     private void setClickIntent(int appWidgetId) {
-
+        printMessage("setClickIntent0");
         Intent launchActivity = new Intent(context, WidgetPreferenceActivity.class);
         launchActivity.setAction("android.appwidget.action.APPWIDGET_CONFIGURE");
         launchActivity.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
@@ -258,12 +259,14 @@ public class Widget extends AppWidgetProvider {
         ComponentName thisWidget = new ComponentName(context, Widget.class);
         AppWidgetManager manager = AppWidgetManager.getInstance(context);
         manager.updateAppWidget(thisWidget, remoteViews);
-
+        printMessage("setClickIntent1");
     }
 
     // Load data and generate a bitmap with commits.
     private Bitmap processImage() {
+        printMessage("processImage0");
         return moduleDataCenter.processImage(this);
+//        printMessage("processImage1");
     }
 
     public Point getScreenSize(Context context) {
@@ -289,126 +292,6 @@ public class Widget extends AppWidgetProvider {
         return weeksColumns * getRowSize(context) * 7;
     }
 
-
-    public Bitmap createBitmap(CommitsBase base, Point size) {
-
-        float daysLabelSpaceRatio = showDaysLabel ? 0.8f : 0;
-
-
-        float side = size.x / (weeksColumns + daysLabelSpaceRatio) * (1 - SPACE_RATIO);
-        float space = size.x / (weeksColumns + daysLabelSpaceRatio) - side;
-        float textSize = side * 0.87f;
-
-        int heightPerRow = (int) (7 * (side + space) + textSize + TEXT_GRAPH_SPACE);
-
-        weeksRows = getRowSize(context);
-        int height = heightPerRow * weeksRows;
-
-        ColorTheme colorTheme = new ColorTheme();
-
-
-        Bitmap bitmap = Bitmap.createBitmap(size.x, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-
-        Paint paint = new Paint();
-        paint.setStyle(Paint.Style.FILL);
-
-        Paint paintText = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paintText.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-        paintText.setTextSize(textSize);
-        paintText.setColor(Color.GRAY);
-
-
-        if (base != null) {
-
-            float initx = 0;
-            float inity = 0;
-            float x = 0, y;
-
-            // Draw days labels.
-            if (showDaysLabel) {
-//                y = startOnMonday ? textSize * 2 + TEXT_GRAPH_SPACE : textSize * 2 + TEXT_GRAPH_SPACE + side;
-                y = textSize * 2 + TEXT_GRAPH_SPACE + side;
-                initx = x = textSize;
-            }
-
-            int daysNum = Math.min(base.getDays().size(), weeksColumns * weeksRows * 7);
-
-            y = textSize + TEXT_GRAPH_SPACE;
-
-//            int tmpi = 0;
-//            if (startOnMonday) tmpi = 1;
-//            int startPos = base.findStartPos(base.getDays().size() - daysNum, tmpi);
-            int startPos = base.getDays().size() - daysNum;
-
-            outerloop:
-            for (int i = startPos; i < base.getDays().size(); ) {
-                x = initx;
-                inity = y;
-
-                if (showDaysLabel) {
-                    y += 2 * side + space;
-//                    if (startOnMonday) {
-//                        y -= side + space;
-//                    }
-                    canvas.drawText(context.getString(R.string.m), 0, y, paintText);
-                    canvas.drawText(context.getString(R.string.w), 0, y + 2 * (side + space), paintText);
-                    canvas.drawText(context.getString(R.string.f), textSize * 0.1f, y + 4 * (side + space), paintText);
-//                    if (startOnMonday)
-//                        canvas.drawText(context.getString(R.string.s), textSize * 0.1f, y + 6 * (side + space), paintText);
-                    initx = x = textSize;
-//                    if (startOnMonday) {
-//                        y += side + space;
-//                    }
-                    y -= 2 * side + space;
-                }
-
-                for (int j = i; i < j + weeksColumns * 7; ) {
-                    if (i > base.getDays().size()) {
-                        break outerloop;
-                    }
-                    // Set the position and draw a month name.
-
-
-                    for (int k = i; i < k + 7; i++) {
-
-                        if (i > base.getDays().size()) {
-                            break outerloop;
-                        }
-
-                        if (base.getDays().get(i).getCalendar().get(Calendar.DAY_OF_MONTH) == 1) {
-                            String drawTest;
-                            if (base.getDays().get(i).getCalendar().get(Calendar.MONTH) == 0) {
-                                drawTest = "" + base.getDays().get(i).getCalendar().get(Calendar.YEAR);
-                            } else {
-                                drawTest = base.getDays().get(i).getMonthName();
-                            }
-                            canvas.drawText(drawTest, x, inity - (textSize + TEXT_GRAPH_SPACE) + textSize, paintText);
-                        }
-
-                        paint.setColor(colorTheme.getColor(theme, base.getDays().get(i).getLevel()));
-                        canvas.drawRect(x, y, x + side, y + side, paint);
-
-                        //
-
-//                        canvas.drawText("" + base.getDays().get(i).getDayOfWeek(), x, y, paintText);
-
-                        //
-
-                        y = y + side + space;
-                    }
-
-                    y = inity;
-                    x = x + side + space;
-                }
-                y += heightPerRow;
-            }
-        }
-
-        return bitmap;
-
-        //return Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888);
-    }
 
 //    private void adjustMonthsNum(Context context, int numColumns, int numRows) {
 //        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -460,11 +343,13 @@ public class Widget extends AppWidgetProvider {
 //        editor.commit();
 //    }
 
-    private void printMessage(String msg) {
+    public void printMessage(String msg) {
+        printMessage("printMessage0");
         remoteViews.setTextViewText(R.id.total, "");
         remoteViews.setTextViewText(R.id.totalTextView, "");
         remoteViews.setTextViewText(R.id.days, "");
         remoteViews.setTextViewText(R.id.daysTextView, msg);
+        printMessage("processImage1");
     }
 
     public void setStatus(int status) {
@@ -494,5 +379,26 @@ public class Widget extends AppWidgetProvider {
     public Context getContext() {
         return context;
     }
+
+    public boolean isShowDaysLabel() {
+        return showDaysLabel;
+    }
+
+    public int getWeeksColumns() {
+        return weeksColumns;
+    }
+
+    public void setWeeksRows(int weeksRows) {
+        this.weeksRows = weeksRows;
+    }
+
+    public int getWeeksRows() {
+        return weeksRows;
+    }
+
+    public String getTheme() {
+        return theme;
+    }
+
 
 }
